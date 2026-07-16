@@ -9,8 +9,8 @@
 <meta property="og:description" content="Ideas, engineered to move.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#171417">
-<link rel="icon" type="image/svg+xml" href="New Project.svg">
-<link rel="shortcut icon" href="New Project.svg">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="shortcut icon" href="favicon.svg">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://mudassar.ali/">
 <!-- Preconnect for performance -->
@@ -692,6 +692,11 @@ dialog::backdrop{background:oklch(8% .012 335/.92);backdrop-filter:blur(7px)}
 // ===========================
 // SUPABASE CONFIGURATION
 // ===========================
+// ⚠️ SECURITY NOTE: In production, use environment variables or server-side proxy
+// These keys are exposed in client-side code. For better security:
+// 1. Use a backend API endpoint to handle form submissions
+// 2. Implement rate limiting and spam protection
+// 3. Consider using Supabase Edge Functions for sensitive operations
 const SUPABASE_URL = 'https://ftoaghmbibpkgkyonzbb.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0b2FnaG1iaWJwa2dreW9uemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTc4MzgsImV4cCI6MjA5OTU5MzgzOH0.KQowMR2Vt4MsbFnIJyneS7df0_zHzSrngyqcR5xpqB4';
 
@@ -1025,6 +1030,13 @@ async function handleFormSubmit(formData, statusId, btnId) {
   const timeline = formData.get('timeline') || '';
   const brief    = formData.get('brief') || '';
 
+  // Client-side validation feedback
+  if (!name || !brand || !email || !brief) {
+    statusEl.textContent = '⚠ Please fill in all required fields.';
+    statusEl.style.color = 'var(--faint)';
+    return;
+  }
+
   statusEl.textContent = 'Saving your brief…';
   statusEl.style.color = 'var(--soft)';
   if (submitEl) { submitEl.disabled = true; submitEl.style.opacity = '.6'; }
@@ -1079,7 +1091,10 @@ async function handleFormSubmit(formData, statusId, btnId) {
 // ===========================
 // SMOOTH CURSOR
 // ===========================
-if (!isTouch) {
+// Check for reduced motion preference
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!isTouch && !prefersReducedMotion) {
   const cur = document.getElementById('cursor');
   let cx = innerWidth/2, cy = innerHeight/2, tx = cx, ty = cy;
   window.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; }, { passive:true });
