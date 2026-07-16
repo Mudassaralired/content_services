@@ -8,21 +8,19 @@ DROP TABLE IF EXISTS contact_messages CASCADE;
 CREATE TABLE contact_messages (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL,
-    full_name TEXT NOT NULL,
-    brand_name TEXT NOT NULL,
+    name TEXT NOT NULL,
+    brand TEXT NOT NULL,
     email TEXT NOT NULL,
-    phone TEXT,
-    service_type TEXT NOT NULL,
-    budget_estimate TEXT NOT NULL, -- Now accepts custom text input
-    project_details TEXT NOT NULL,
-    ip_address INET,
-    user_agent TEXT,
+    service TEXT NOT NULL,
+    budget TEXT NOT NULL, -- Custom text input for budget estimate
+    timeline TEXT NOT NULL,
+    brief TEXT NOT NULL,
     status TEXT DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'qualified', 'closed'))
 );
 
 -- Add comments for clarity
 COMMENT ON TABLE contact_messages IS 'Stores contact form submissions from the portfolio website';
-COMMENT ON COLUMN contact_messages.budget_estimate IS 'Custom budget estimate provided by the client (text input)';
+COMMENT ON COLUMN contact_messages.budget IS 'Custom budget estimate provided by the client (text input like 50,000 PKR or $1,000)';
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
@@ -34,9 +32,8 @@ ON contact_messages
 FOR INSERT
 WITH CHECK (true);
 
--- Optional: Create a policy for authenticated users (admins) to view all submissions
--- Uncomment the lines below if you have authentication setup for admin access
-/*
+-- IMPORTANT: Create a policy to allow authenticated users (admins) to view all submissions
+-- This is required for the Admin Panel to work
 CREATE POLICY "Allow authenticated users to view all submissions"
 ON contact_messages
 FOR SELECT
@@ -46,7 +43,6 @@ CREATE POLICY "Allow authenticated users to update status"
 ON contact_messages
 FOR UPDATE
 USING (auth.role() = 'authenticated');
-*/
 
 -- Create an index on created_at for faster sorting/querying
 CREATE INDEX idx_contact_messages_created_at ON contact_messages(created_at DESC);

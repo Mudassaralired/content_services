@@ -1078,6 +1078,262 @@ async function handleFormSubmit(formData, statusId, btnId) {
 }
 
 // ===========================
+// ADMIN PANEL MODAL
+// ===========================
+const adminModal = document.createElement('div');
+adminModal.id = 'adminModal';
+adminModal.style.cssText = `
+  position:fixed;inset:0;background:oklch(10% .014 335/.96);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;
+`;
+adminModal.innerHTML = `
+  <div style="background:var(--ink);border:1px solid var(--line);border-radius:16px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;padding:30px;position:relative;">
+    <button id="adminClose" style="position:absolute;top:16px;right:16px;background:none;border:0;color:var(--soft);font-size:1.8rem;cursor:pointer;line-height:1;">×</button>
+    <h2 style="font-family:'Bricolage Grotesque';font-size:clamp(1.8rem,4vw,2.5rem);margin-bottom:8px;">Admin Panel</h2>
+    <p style="color:var(--soft);margin-bottom:24px;">View and manage contact form submissions</p>
+    
+    <!-- Login Section -->
+    <div id="adminLogin">
+      <div class="row" style="display:grid;gap:16px;margin-bottom:20px;">
+        <label style="display:block;">
+          <span style="display:block;color:var(--soft);margin-bottom:6px;font-size:.9rem;">Username</span>
+          <input type="text" id="adminUser" style="width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--ink-2);color:var(--paper);font-size:1rem;" placeholder="Enter username">
+        </label>
+        <label style="display:block;">
+          <span style="display:block;color:var(--soft);margin-bottom:6px;font-size:.9rem;">Password</span>
+          <input type="password" id="adminPass" style="width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--ink-2);color:var(--paper);font-size:1rem;" placeholder="Enter password">
+        </label>
+      </div>
+      <button id="adminLoginBtn" class="button" style="width:100%;">Login to Dashboard</button>
+      <p id="adminLoginMsg" style="margin-top:12px;text-align:center;"></p>
+    </div>
+    
+    <!-- Dashboard Section -->
+    <div id="adminDashboard" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <h3 style="font-family:'Bricolage Grotesque';font-size:1.4rem;">Contact Submissions</h3>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button id="refreshData" class="button secondary" style="min-height:38px;padding:8px 16px;">↻ Refresh</button>
+          <button id="exportCSV" class="button secondary" style="min-height:38px;padding:8px 16px;">↓ Export CSV</button>
+          <button id="adminLogout" class="button secondary" style="min-height:38px;padding:8px 16px;">Logout</button>
+        </div>
+      </div>
+      
+      <div id="adminLoading" style="text-align:center;padding:40px;color:var(--soft);">Loading submissions...</div>
+      <div id="adminNoData" style="display:none;text-align:center;padding:40px;color:var(--faint);">No submissions yet.</div>
+      
+      <div id="adminTableContainer" style="display:none;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:.9rem;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--line);">
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Date</th>
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Name</th>
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Brand</th>
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Email</th>
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Service</th>
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Budget</th>
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Timeline</th>
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Brief</th>
+              <th style="text-align:left;padding:12px 8px;color:var(--accent);font-weight:600;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+`;
+document.body.appendChild(adminModal);
+
+// Admin credentials (CHANGE THESE!)
+const ADMIN_USER = 'mudassar';
+const ADMIN_PASS = 'Mudassar2026!Secure';
+
+let isAdminLoggedIn = false;
+
+// Open admin panel with keyboard shortcut (Ctrl+Shift+A)
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+    e.preventDefault();
+    openAdminPanel();
+  }
+});
+
+// Also add hidden trigger in footer
+const adminTrigger = document.createElement('div');
+adminTrigger.style.cssText = 'position:fixed;bottom:8px;right:8px;width:12px;height:12px;opacity:0;cursor:pointer;z-index:9998;';
+adminTrigger.onclick = openAdminPanel;
+document.body.appendChild(adminTrigger);
+
+function openAdminPanel() {
+  adminModal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  if (isAdminLoggedIn) {
+    showDashboard();
+  } else {
+    document.getElementById('adminLogin').style.display = 'block';
+    document.getElementById('adminDashboard').style.display = 'none';
+    document.getElementById('adminUser').value = '';
+    document.getElementById('adminPass').value = '';
+    document.getElementById('adminLoginMsg').textContent = '';
+  }
+}
+
+document.getElementById('adminClose').onclick = closeAdminPanel;
+function closeAdminPanel() {
+  adminModal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('adminLoginBtn').onclick = async () => {
+  const user = document.getElementById('adminUser').value.trim();
+  const pass = document.getElementById('adminPass').value.trim();
+  const msg = document.getElementById('adminLoginMsg');
+  
+  if (!user || !pass) {
+    msg.textContent = '⚠ Please enter both username and password';
+    msg.style.color = 'var(--faint)';
+    return;
+  }
+  
+  // Simple authentication (for production, use Supabase Auth!)
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    isAdminLoggedIn = true;
+    msg.textContent = '✓ Login successful!';
+    msg.style.color = 'var(--ok)';
+    setTimeout(() => {
+      document.getElementById('adminLogin').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+      showDashboard();
+    }, 800);
+  } else {
+    msg.textContent = '✗ Invalid credentials';
+    msg.style.color = 'var(--faint)';
+  }
+};
+
+document.getElementById('adminLogout').onclick = () => {
+  isAdminLoggedIn = false;
+  document.getElementById('adminDashboard').style.display = 'none';
+  document.getElementById('adminLogin').style.display = 'block';
+  document.getElementById('adminUser').value = '';
+  document.getElementById('adminPass').value = '';
+  document.getElementById('adminLoginMsg').textContent = '';
+};
+
+document.getElementById('refreshData').onclick = showDashboard;
+
+document.getElementById('exportCSV').onclick = exportToCSV;
+
+async function showDashboard() {
+  const loading = document.getElementById('adminLoading');
+  const noData = document.getElementById('adminNoData');
+  const tableContainer = document.getElementById('adminTableContainer');
+  const tbody = document.getElementById('adminTableBody');
+  
+  loading.style.display = 'block';
+  noData.style.display = 'none';
+  tableContainer.style.display = 'none';
+  tbody.innerHTML = '';
+  
+  if (!supabaseClient) {
+    loading.textContent = 'Supabase not initialized. Please wait...';
+    setTimeout(showDashboard, 500);
+    return;
+  }
+  
+  try {
+    const { data: submissions, error } = await supabaseClient
+      .from('contact_messages')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    loading.style.display = 'none';
+    
+    if (error) {
+      noData.textContent = 'Error loading data: ' + error.message;
+      noData.style.display = 'block';
+      return;
+    }
+    
+    if (!submissions || submissions.length === 0) {
+      noData.style.display = 'block';
+      return;
+    }
+    
+    tableContainer.style.display = 'block';
+    
+    submissions.forEach(sub => {
+      const tr = document.createElement('tr');
+      tr.style.cssText = 'border-bottom:1px solid var(--line);transition:background .2s;';
+      tr.onmouseover = () => tr.style.background = 'var(--ink-2)';
+      tr.onmouseout = () => tr.style.background = '';
+      
+      const date = new Date(sub.created_at).toLocaleString('en-US', { 
+        year: 'numeric', month: 'short', day: 'numeric', 
+        hour: '2-digit', minute: '2-digit' 
+      });
+      
+      const timelineLabels = { 
+        immediate: 'Immediate (< 2 weeks)', 
+        one_month: 'Within 1 month', 
+        one_two_months: '1–2 months', 
+        flexible: 'Flexible' 
+      };
+      
+      tr.innerHTML = `
+        <td style="padding:12px 8px;color:var(--soft);white-space:nowrap;">${date}</td>
+        <td style="padding:12px 8px;color:var(--paper);">${escapeHtml(sub.name)}</td>
+        <td style="padding:12px 8px;color:var(--paper);">${escapeHtml(sub.brand)}</td>
+        <td style="padding:12px 8px;"><a href="mailto:${escapeHtml(sub.email)}" style="color:var(--accent);">${escapeHtml(sub.email)}</a></td>
+        <td style="padding:12px 8px;color:var(--soft);">${escapeHtml(sub.service)}</td>
+        <td style="padding:12px 8px;color:var(--paper);font-weight:600;">${escapeHtml(sub.budget)}</td>
+        <td style="padding:12px 8px;color:var(--soft);">${timelineLabels[sub.timeline] || sub.timeline}</td>
+        <td style="padding:12px 8px;color:var(--soft);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(sub.brief)}">${escapeHtml(sub.brief)}</td>
+        <td style="padding:12px 8px;"><span style="display:inline-block;padding:4px 10px;border-radius:999px;background:oklch(73% .12 155/.15);color:var(--ok);font-size:.75rem;font-weight:600;">New</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    loading.style.display = 'none';
+    noData.textContent = 'Error: ' + err.message;
+    noData.style.display = 'block';
+  }
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function exportToCSV() {
+  const tbody = document.getElementById('adminTableBody');
+  if (!tbody.children.length) {
+    alert('No data to export');
+    return;
+  }
+  
+  let csv = 'Date,Name,Brand,Email,Service,Budget,Timeline,Brief,Status\n';
+  
+  Array.from(tbody.children).forEach(row => {
+    const cells = row.children;
+    const values = Array.from(cells).map(cell => {
+      let text = cell.textContent || cell.innerText || '';
+      text = text.replace(/"/g, '""');
+      return `"${text}"`;
+    });
+    csv += values.join(',') + '\n';
+  });
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `contact_submissions_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+}
+
+// ===========================
 // SMOOTH CURSOR
 // ===========================
 // Check for reduced motion preference
