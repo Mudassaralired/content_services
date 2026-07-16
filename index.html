@@ -317,7 +317,9 @@ dialog::backdrop{background:oklch(8% .012 335/.92);backdrop-filter:blur(7px)}
   .navlinks{display:none}
   .hamb{display:block}
   .nav-cta{display:none}
+  .admin-btn-nav{display:none}
   .navlinks.open{display:flex;position:fixed;inset:78px 0 auto;background:var(--ink-2);padding:28px 24px;flex-direction:column;align-items:flex-start;border-bottom:1px solid var(--line)}
+  .navlinks.open .admin-btn-nav{display:block;width:100%;margin-top:12px;}
   .section-head{grid-template-columns:1fr}
   .project,.project.feature,.project.side{grid-column:span 12;aspect-ratio:16/10}
   .positioning-grid{grid-template-columns:1fr;gap:64px}
@@ -349,6 +351,23 @@ dialog::backdrop{background:oklch(8% .012 335/.92);backdrop-filter:blur(7px)}
   *{scroll-behavior:auto!important;animation-duration:.001ms!important;transition-duration:.001ms!important}
   .tst-row-left .tst-track,.tst-row-right .tst-track,.tst-row-mid .tst-track{animation:none!important}
 }
+
+/* ===== ADMIN BUTTON NAV ===== */
+.admin-btn-nav{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  padding:8px 16px;
+  border-radius:6px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .3s ease;
+  font-size:14px;
+}
+.admin-btn-nav:hover{
+  background:var(--text);
+  transform:translateY(-2px);
+}
 </style>
 </head>
 <body>
@@ -369,6 +388,7 @@ dialog::backdrop{background:oklch(8% .012 335/.92);backdrop-filter:blur(7px)}
       <li><a href="#process" data-cursor>Process</a></li>
       <li><a href="#testimonials" data-cursor>Reviews</a></li>
       <li><a href="#contact" data-cursor>Contact</a></li>
+      <li><button id="adminLoginBtn" class="admin-btn-nav" title="Admin Panel">🔒 Admin</button></li>
     </ul>
     <a href="#contact" class="button nav-cta" data-cursor>Start a project</a>
     <button class="hamb" id="hamb" aria-label="Open menu">☰</button>
@@ -1163,6 +1183,12 @@ const adminTrigger = document.createElement('div');
 adminTrigger.style.cssText = 'position:fixed;bottom:8px;right:8px;width:12px;height:12px;opacity:0;cursor:pointer;z-index:9998;';
 adminTrigger.onclick = openAdminPanel;
 document.body.appendChild(adminTrigger);
+
+// Add click event to visible admin button in nav
+document.getElementById('adminLoginBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  openAdminPanel();
+});
 
 function openAdminPanel() {
   adminModal.style.display = 'flex';
