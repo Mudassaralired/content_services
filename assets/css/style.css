@@ -354,6 +354,43 @@ h1 {
   50% { opacity: .5; transform: scale(1.4); }
 }
 
+/* ===== TRUSTED BRANDS LOGO GRID ===== */
+.trusted-brands {
+  padding-block: 56px;
+  border-top: 1px solid var(--line);
+  background: var(--ink);
+}
+.trust-title {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--faint);
+  margin-bottom: 32px;
+}
+.brand-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(32px, 6vw, 64px);
+}
+.brand-logo {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  font-weight: 800;
+  color: var(--soft);
+  opacity: 0.45;
+  transition: opacity 0.3s var(--ease), color 0.3s var(--ease), transform 0.3s var(--ease);
+  letter-spacing: -0.02em;
+}
+.brand-logo:hover {
+  opacity: 0.9;
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
 /* ===== TICKER ===== */
 .ticker {
   overflow: hidden;
@@ -963,6 +1000,18 @@ section {
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
+.field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.field-wrap label {
+  color: var(--soft);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
 label {
   display: grid;
   gap: 8px;
@@ -1146,6 +1195,21 @@ footer.site {
   gap: 20px;
   color: var(--faint);
   font-size: .75rem;
+}
+.footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.soc-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--soft);
+  transition: color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.soc-icon:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
 }
 
 /* ===== SCROLL REVEAL ANIMATIONS ===== */

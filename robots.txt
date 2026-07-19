@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow indexing of admin panel for security
+Disallow: /admin.html
+Disallow: /assets/css/admin.css
+Disallow: /assets/js/admin.js
+
+Sitemap: https://mudassar.ali/sitemap.xml

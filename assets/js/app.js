@@ -1,4 +1,15 @@
 // ===========================
+// SERVICE WORKER REGISTRATION
+// ===========================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker registered successfully:', reg.scope))
+      .catch(err => console.warn('Service Worker registration failed:', err));
+  });
+}
+
+// ===========================
 // SUPABASE CONFIGURATION
 // ===========================
 const SUPABASE_URL = 'https://ftoaghmbibpkgkyonzbb.supabase.co';
@@ -350,17 +361,17 @@ async function handleFormSubmit(formData, statusId, btnId) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!name) {
     statusEl.textContent = '⚠ Please enter your name.';
-    statusEl.style.color = '#f87171';
+    statusEl.style.color = 'var(--accent)';
     return;
   }
   if (!email || !emailRegex.test(email)) {
     statusEl.textContent = '⚠ Please enter a valid email address.';
-    statusEl.style.color = '#f87171';
+    statusEl.style.color = 'var(--accent)';
     return;
   }
   if (!brief) {
     statusEl.textContent = '⚠ Please write a short project brief.';
-    statusEl.style.color = '#f87171';
+    statusEl.style.color = 'var(--accent)';
     return;
   }
 

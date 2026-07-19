@@ -21,11 +21,11 @@
     <h2>Admin Panel</h2>
     <p>Mudassar Ali — Portfolio Dashboard</p>
     <div class="field">
-      <label>Username</label>
+      <label for="loginUser">Username</label>
       <input id="loginUser" type="text" placeholder="Enter username" autocomplete="username">
     </div>
     <div class="field">
-      <label>Password</label>
+      <label for="loginPass">Password</label>
       <input id="loginPass" type="password" placeholder="Enter password" autocomplete="current-password">
     </div>
     <button class="btn" id="loginBtn">Sign In →</button>
@@ -33,98 +33,103 @@
   </div>
 </div>
 
-<!-- ===== ADMIN APP ===== -->
-<div id="adminApp">
+<!-- Container for instantiated authenticated dashboard -->
+<div id="dashboardContainer"></div>
 
-  <!-- Top Bar -->
-  <header class="topbar">
-    <div class="topbar-brand">
-      <span class="topbar-brand-mark"></span>
-      <span>Mudassar Ali — Admin</span>
-    </div>
-    <div class="topbar-right">
-      <div class="badge">Messages: <b id="totalCount">—</b></div>
-      <div class="badge" id="todayBadge" style="display:none">Today: <b id="todayCount">0</b></div>
-      <button class="logout-btn" id="logoutBtn">Sign Out</button>
-    </div>
-  </header>
+<!-- ===== SECURE ADMIN DASHBOARD TEMPLATE ===== -->
+<template id="adminDashboardTemplate">
+  <div id="adminApp">
 
-  <!-- Main -->
-  <main class="admin-main">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-brand">
+        <span class="topbar-brand-mark"></span>
+        <span>Mudassar Ali — Admin</span>
+      </div>
+      <div class="topbar-right">
+        <div class="badge">Messages: <b id="totalCount">—</b></div>
+        <div class="badge" id="todayBadge" style="display:none">Today: <b id="todayCount">0</b></div>
+        <button class="logout-btn" id="logoutBtn">Sign Out</button>
+      </div>
+    </header>
 
-    <!-- Stats -->
-    <div class="stats">
-      <div class="stat-card"><div class="num" id="statTotal">—</div><div class="lbl">Total Inquiries</div></div>
-      <div class="stat-card"><div class="num" id="statToday">—</div><div class="lbl">Today</div></div>
-      <div class="stat-card"><div class="num" id="statWeek">—</div><div class="lbl">This Week</div></div>
-      <div class="stat-card"><div class="num" id="statService">—</div><div class="lbl">Top Service</div></div>
-    </div>
+    <!-- Main -->
+    <main class="admin-main">
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <input type="text" id="searchInput" placeholder="🔍  Search by name, email, company…">
-      <select id="serviceFilter">
-        <option value="">All Services</option>
-        <option value="Performance creative">Performance Creative</option>
-        <option value="Product storytelling">Product Storytelling</option>
-        <option value="Motion system">Motion System</option>
-        <option value="Not sure yet">Not Sure Yet</option>
-      </select>
-      <button class="tb-btn" id="refreshBtn">↻ Refresh</button>
-      <button class="tb-btn" id="exportBtn">⬇ Export CSV</button>
-      <button class="tb-btn danger" id="deleteSelectedBtn" style="display:none">🗑 Delete Selected</button>
-    </div>
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-card"><div class="num" id="statTotal">—</div><div class="lbl">Total Inquiries</div></div>
+        <div class="stat-card"><div class="num" id="statToday">—</div><div class="lbl">Today</div></div>
+        <div class="stat-card"><div class="num" id="statWeek">—</div><div class="lbl">This Week</div></div>
+        <div class="stat-card"><div class="num" id="statService">—</div><div class="lbl">Top Service</div></div>
+      </div>
 
-    <!-- Table -->
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th><input type="checkbox" id="selectAll" title="Select all"></th>
-            <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Company</th>
-            <th>Service</th>
-            <th>Budget</th>
-            <th>Timeline</th>
-            <th>Brief</th>
-            <th>Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr class="state-row"><td colspan="11"><div class="spinner"></div><br><br>Loading…</td></tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="🔍  Search by name, email, company…">
+        <select id="serviceFilter">
+          <option value="">All Services</option>
+          <option value="Performance creative">Performance Creative</option>
+          <option value="Product storytelling">Product Storytelling</option>
+          <option value="Motion system">Motion System</option>
+          <option value="Not sure yet">Not Sure Yet</option>
+        </select>
+        <button class="tb-btn" id="refreshBtn">↻ Refresh</button>
+        <button class="tb-btn" id="exportBtn">⬇ Export CSV</button>
+        <button class="tb-btn danger" id="deleteSelectedBtn" style="display:none">🗑 Delete Selected</button>
+      </div>
 
-    <!-- Pagination -->
-    <div class="pagination" id="pagination"></div>
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAll" title="Select all"></th>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Company</th>
+              <th>Service</th>
+              <th>Budget</th>
+              <th>Timeline</th>
+              <th>Brief</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr class="state-row"><td colspan="11"><div class="spinner"></div><br><br>Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-  </main>
-</div>
+      <!-- Pagination -->
+      <div class="pagination" id="pagination"></div>
 
-<!-- Detail Modal -->
-<div class="detail-overlay" id="detailOverlay">
-  <div class="detail-box">
-    <button class="detail-close" id="detailClose">×</button>
-    <h3 id="detailName"></h3>
-    <div class="detail-date" id="detailDate"></div>
-    <div class="detail-row"><b>Email</b><span id="detailEmail"></span></div>
-    <div class="detail-row"><b>Company</b><span id="detailBrand"></span></div>
-    <div class="detail-row"><b>Service</b><span id="detailService"></span></div>
-    <div class="detail-row"><b>Budget</b><span id="detailBudget"></span></div>
-    <div class="detail-row"><b>Timeline</b><span id="detailTimeline"></span></div>
-    <div class="detail-row" style="grid-template-columns:1fr;gap:10px">
-      <b>Project Brief</b>
-      <p class="detail-brief" id="detailBrief"></p>
-    </div>
-    <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
-      <a id="detailReplyBtn" href="#" class="btn" style="width:auto;padding:0 28px;min-height:42px;display:inline-flex;align-items:center;text-decoration:none">Reply via Email ↗</a>
+    </main>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="detail-overlay" id="detailOverlay">
+    <div class="detail-box">
+      <button class="detail-close" id="detailClose">×</button>
+      <h3 id="detailName"></h3>
+      <div class="detail-date" id="detailDate"></div>
+      <div class="detail-row"><b>Email</b><span id="detailEmail"></span></div>
+      <div class="detail-row"><b>Company</b><span id="detailBrand"></span></div>
+      <div class="detail-row"><b>Service</b><span id="detailService"></span></div>
+      <div class="detail-row"><b>Budget</b><span id="detailBudget"></span></div>
+      <div class="detail-row"><b>Timeline</b><span id="detailTimeline"></span></div>
+      <div class="detail-row" style="grid-template-columns:1fr;gap:10px">
+        <b>Project Brief</b>
+        <p class="detail-brief" id="detailBrief"></p>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+        <a id="detailReplyBtn" href="#" class="btn" style="width:auto;padding:0 28px;min-height:42px;display:inline-flex;align-items:center;text-decoration:none">Reply via Email ↗</a>
+      </div>
     </div>
   </div>
-</div>
+</template>
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>

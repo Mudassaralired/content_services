@@ -24,6 +24,44 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
 <!-- Stylesheet -->
 <link rel="stylesheet" href="assets/css/style.css">
+<!-- Structured Schema Data (JSON-LD SEO) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Mudassar Ali | AI Video & Motion Director",
+  "image": "https://mudassar.ali/assets/brand/logo.svg",
+  "@id": "https://mudassar.ali/",
+  "url": "https://mudassar.ali/",
+  "telephone": "+923481321775",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "PK"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "30.3753",
+    "longitude": "69.3451"
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "opens": "00:00",
+    "closes": "23:59"
+  },
+  "sameAs": [
+    "https://wa.me/923481321775"
+  ]
+}
+</script>
 </head>
 <body>
 <!-- Scroll progress bar -->
@@ -70,6 +108,21 @@
   <div class="hero-note">
     <b>Mudassar Ali</b>Independent AI Video &amp; Motion Director<br>Pakistan, working worldwide
     <span class="hero-status"><i></i>Available for selected projects</span>
+  </div>
+</section>
+
+<!-- TRUSTED BY LOGO GRID -->
+<section class="trusted-brands reveal">
+  <div class="wrap">
+    <p class="trust-title">Collaborated with founders & brand leads at</p>
+    <div class="brand-grid">
+      <span class="brand-logo" data-cursor>AuraGlow</span>
+      <span class="brand-logo" data-cursor>Nomad Kit</span>
+      <span class="brand-logo" data-cursor>ByteFlow</span>
+      <span class="brand-logo" data-cursor>Velo Athletics</span>
+      <span class="brand-logo" data-cursor>Zenith Sleep</span>
+      <span class="brand-logo" data-cursor>Lumina Tech</span>
+    </div>
   </div>
 </section>
 
@@ -217,34 +270,49 @@
       <p>Your details are saved securely and an email is prepared for you automatically.</p>
       <form class="form" id="contactForm" novalidate>
         <div class="row">
-          <label>Your name<input id="f-name" name="name" required autocomplete="name" placeholder="Name" type="text"></label>
-          <label>Company / Brand<input id="f-brand" name="brand" required placeholder="Company or brand" type="text"></label>
+          <div class="field-wrap">
+            <label for="f-name">Your name</label>
+            <input id="f-name" name="name" required autocomplete="name" placeholder="Name" type="text">
+          </div>
+          <div class="field-wrap">
+            <label for="f-brand">Company / Brand</label>
+            <input id="f-brand" name="brand" required placeholder="Company or brand" type="text">
+          </div>
         </div>
         <div class="row">
-          <label>Email address<input id="f-email" name="email" type="email" required autocomplete="email" placeholder="you@brand.com"></label>
-          <label>Service needed
+          <div class="field-wrap">
+            <label for="f-email">Email address</label>
+            <input id="f-email" name="email" type="email" required autocomplete="email" placeholder="you@brand.com">
+          </div>
+          <div class="field-wrap">
+            <label for="f-service">Service needed</label>
             <select id="f-service" name="service">
               <option>Performance creative</option>
               <option>Product storytelling</option>
               <option>Motion system</option>
               <option>Not sure yet</option>
             </select>
-          </label>
+          </div>
         </div>
         <div class="row">
-          <label>Budget (type your amount)
+          <div class="field-wrap">
+            <label for="f-budget">Budget (type your amount)</label>
             <input id="f-budget" name="budget" type="text" placeholder="e.g. $3,000 or $10,000+" autocomplete="off">
-          </label>
-          <label>Timeline
+          </div>
+          <div class="field-wrap">
+            <label for="f-timeline">Timeline</label>
             <select id="f-timeline" name="timeline">
               <option value="immediate">Immediate (&lt; 2 weeks)</option>
               <option value="one_month" selected>Within 1 month</option>
               <option value="one_two_months">1–2 months</option>
               <option value="flexible">Flexible</option>
             </select>
-          </label>
+          </div>
         </div>
-        <label>Project brief<textarea id="f-brief" name="brief" rows="5" required placeholder="What are you launching, who is it for, and what should the film achieve?"></textarea></label>
+        <div class="field-wrap">
+          <label for="f-brief">Project brief</label>
+          <textarea id="f-brief" name="brief" rows="5" required placeholder="What are you launching, who is it for, and what should the film achieve?"></textarea>
+        </div>
         <div>
           <button class="button submit-btn" type="submit" id="submitBtn" data-cursor>Send Brief &amp; Open Email ↗</button>
           <div class="form-status" id="formStatus" aria-live="polite"></div>
@@ -272,6 +340,17 @@
     </div>
     <div class="footer-bottom">
       <span>© 2026 Mudassar Ali. Independent practice, available worldwide.</span>
+      <div class="footer-socials">
+        <a href="https://vimeo.com/" target="_blank" rel="noopener" aria-label="Vimeo Portfolio" data-cursor>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="soc-icon"><path d="M22.3 8.3c-.1 2-1.5 4.8-4.1 8.4-2.7 3.7-5 5.5-7 5.5-1.2 0-2.2-1.1-3-3.3-.5-1.9-1.1-3.9-1.7-5.9-.6-2.2-1.3-3.3-2-3.3-.2 0-.8.4-1.8 1.2L1.5 9.4c1.2-1 2.4-2.1 3.7-3.2 1.8-1.5 3.1-2.3 4-2.3 2.1 0 3.2 1.4 3.4 4.3.2 2.4.7 4.9 1.4 7.4.5 1.7.9 2.6 1.4 2.6.4 0 1-.9 1.9-2.7.9-1.7.9-2.9.1-3.6-.8-.7-2.3-.5-2.3-.5 1-.9 2.5-2.2 4.4-2.4 1.8-.2 2.7 1 2.8 3.5z"/></svg>
+        </a>
+        <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn Profile" data-cursor>
+          <svg viewBox="0 0 24 24" fill="currentColor" class="soc-icon"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        </a>
+        <a href="https://wa.me/923481321775" target="_blank" rel="noopener" aria-label="WhatsApp Chat" data-cursor>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="soc-icon"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.2-5.3A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8.5 9c0 4 3 6.5 6.5 6.5"/></svg>
+        </a>
+      </div>
       <span>banmance5@gmail.com</span>
     </div>
   </div>
@@ -320,31 +399,46 @@
 
     <form id="modalForm" class="form" novalidate>
       <div class="row">
-        <label>Name<input id="mf-name" name="name" required placeholder="Your name" type="text"></label>
-        <label>Company<input id="mf-company" name="company" placeholder="Company name" type="text"></label>
+        <div class="field-wrap">
+          <label for="mf-name">Name</label>
+          <input id="mf-name" name="name" required placeholder="Your name" type="text">
+        </div>
+        <div class="field-wrap">
+          <label for="mf-company">Company</label>
+          <input id="mf-company" name="company" placeholder="Company name" type="text">
+        </div>
       </div>
-      <label>Email<input id="mf-email" name="email" type="email" required placeholder="you@brand.com"></label>
-      <label>Service
+      <div class="field-wrap">
+        <label for="mf-email">Email</label>
+        <input id="mf-email" name="email" type="email" required placeholder="you@brand.com">
+      </div>
+      <div class="field-wrap">
+        <label for="mf-service">Service</label>
         <select id="mf-service" name="service">
           <option>Performance creative</option>
           <option>Product storytelling</option>
           <option>Motion system</option>
           <option>Not sure yet</option>
         </select>
-      </label>
+      </div>
       <div class="row">
-        <label>Budget (type your amount)
+        <div class="field-wrap">
+          <label for="mf-budget">Budget (type your amount)</label>
           <input id="mf-budget" name="budget" type="text" placeholder="e.g. $3,000 or $10,000+" autocomplete="off">
-        </label>
-        <label>Timeline
+        </div>
+        <div class="field-wrap">
+          <label for="mf-timeline">Timeline</label>
           <select id="mf-timeline" name="timeline">
             <option value="immediate">Immediate (&lt; 2 weeks)</option>
             <option value="one_month" selected>Within 1 month</option>
             <option value="flexible">Flexible</option>
           </select>
-        </label>
+        </div>
       </div>
-      <label>Brief<textarea id="mf-brief" name="brief" rows="4" placeholder="What are you launching, who is it for, and what should the film achieve?"></textarea></label>
+      <div class="field-wrap">
+        <label for="mf-brief">Brief</label>
+        <textarea id="mf-brief" name="brief" rows="4" placeholder="What are you launching, who is it for, and what should the film achieve?"></textarea>
+      </div>
       <div class="modal-actions">
         <button class="button submit-btn" type="submit" id="modalSubmitBtn" data-cursor>Save &amp; Open Email ↗</button>
         <button type="button" class="button secondary" id="emailModalClose2" data-cursor>Cancel</button>

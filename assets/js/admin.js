@@ -20,10 +20,9 @@ function initSB() {
 }
 
 // ===========================
-// LOGIN
+// LOGIN & SESSION MANAGEMENT
 // ===========================
 const loginScreen = document.getElementById('loginScreen');
-const adminApp    = document.getElementById('adminApp');
 
 function checkSession() {
   return sessionStorage.getItem('admin_auth') === 'ok';
@@ -35,41 +34,116 @@ function clearSession() {
   sessionStorage.removeItem('admin_auth');
 }
 
+// Secure Template Guard instantiation
+function instantiateDashboard() {
+  const container = document.getElementById('dashboardContainer');
+  if (container && !container.children.length) {
+    const template = document.getElementById('adminDashboardTemplate');
+    container.appendChild(template.content.cloneNode(true));
+    initDashboardDOM();
+  }
+}
+
+// Bind all dashboard event listeners post-instantiation
+function initDashboardDOM() {
+  document.getElementById('logoutBtn').onclick = () => {
+    clearSession();
+    location.reload();
+  };
+
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchTerm = e.target.value.toLowerCase();
+    currentPage = 1;
+    applyFilters();
+  });
+
+  document.getElementById('serviceFilter').addEventListener('change', e => {
+    serviceFilter = e.target.value;
+    currentPage = 1;
+    applyFilters();
+  });
+
+  document.getElementById('selectAll').addEventListener('change', e => {
+    const start = (currentPage - 1) * PER_PAGE;
+    const rows  = filtered.slice(start, start + PER_PAGE);
+    rows.forEach(r => {
+      if (e.target.checked) selected.add(r.id); else selected.delete(r.id);
+    });
+    renderTable();
+    updateDeleteBtn();
+  });
+
+  document.getElementById('deleteSelectedBtn').onclick = async () => {
+    if (!selected.size) return;
+    if (!confirm(`Delete ${selected.size} selected message(s)?`)) return;
+    const ids = [...selected];
+    try {
+      const { error } = await sb.from('contact_messages').delete().in('id', ids);
+      if (error) throw error;
+      allRows = allRows.filter(r => !selected.has(r.id));
+      selected.clear();
+      applyFilters();
+      updateStats();
+      showToast(`${ids.length} message(s) deleted.`, 'ok');
+    } catch (err) {
+      showToast('Bulk delete failed: ' + err.message, 'err');
+    }
+  };
+
+  document.getElementById('exportBtn').onclick = () => {
+    const cols = ['id','name','brand','email','service','budget','timeline','brief','created_at'];
+    const escVal = v => `"${String(v||'').replace(/"/g,'""')}"`;
+    const rows = [cols.join(','), ...filtered.map(r => cols.map(c=>escVal(r[c])).join(','))];
+    const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `inquiries_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    showToast('CSV exported!', 'ok');
+  };
+
+  document.getElementById('refreshBtn').onclick = () => loadData();
+  document.getElementById('detailClose').onclick = closeDetail;
+
+  const detailOverlay = document.getElementById('detailOverlay');
+  detailOverlay.addEventListener('click', e => {
+    if (e.target === detailOverlay) closeDetail();
+  });
+}
+
+// Initial Boot Guard check
 if (checkSession()) {
-  loginScreen.classList.add('hidden');
-  adminApp.classList.add('show');
+  if (loginScreen) loginScreen.classList.add('hidden');
+  instantiateDashboard();
   initSB();
   loadData();
 }
 
-document.getElementById('loginBtn').onclick = () => {
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value;
-  const errEl = document.getElementById('loginErr');
-  if (u === ADMIN_USER && p === ADMIN_PASS) {
-    errEl.textContent = '';
-    setSession();
-    loginScreen.classList.add('hidden');
-    adminApp.classList.add('show');
-    initSB();
-    loadData();
-  } else {
-    errEl.textContent = '⚠ Incorrect username or password.';
-  }
-};
+// Login Box bindings
+if (document.getElementById('loginBtn')) {
+  document.getElementById('loginBtn').onclick = () => {
+    const u = document.getElementById('loginUser').value.trim();
+    const p = document.getElementById('loginPass').value;
+    const errEl = document.getElementById('loginErr');
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      if (errEl) errEl.textContent = '';
+      setSession();
+      if (loginScreen) loginScreen.classList.add('hidden');
+      instantiateDashboard();
+      initSB();
+      loadData();
+    } else {
+      if (errEl) errEl.textContent = '⚠ Incorrect username or password.';
+    }
+  };
 
-// Enter key on password
-document.getElementById('loginPass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('loginBtn').click();
-});
-document.getElementById('loginUser').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('loginPass').focus();
-});
-
-document.getElementById('logoutBtn').onclick = () => {
-  clearSession();
-  location.reload();
-};
+  document.getElementById('loginPass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('loginBtn').click();
+  });
+  document.getElementById('loginUser').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('loginPass').focus();
+  });
+}
 
 // ===========================
 // LOAD DATA
@@ -88,8 +162,10 @@ async function loadData() {
     updateStats();
   } catch (err) {
     showToast('Failed to load data: ' + err.message, 'err');
-    document.getElementById('tableBody').innerHTML =
-      `<tr class="state-row"><td colspan="11">❌ Could not load messages. Check Supabase connection.</td></tr>`;
+    const tbody = document.getElementById('tableBody');
+    if (tbody) {
+      tbody.innerHTML = `<tr class="state-row"><td colspan="11">❌ Could not load messages. Check Supabase connection.</td></tr>`;
+    }
   }
 }
 
@@ -110,15 +186,28 @@ function updateStats() {
   allRows.forEach(r => { if(r.service) svcCounts[r.service] = (svcCounts[r.service]||0)+1; });
   const topSvc = Object.entries(svcCounts).sort((a,b)=>b[1]-a[1])[0];
 
-  document.getElementById('statTotal').textContent   = total;
-  document.getElementById('statToday').textContent   = todayRows.length;
-  document.getElementById('statWeek').textContent    = weekRows.length;
-  document.getElementById('statService').textContent = topSvc ? topSvc[0].split(' ')[0] : '—';
-  document.getElementById('totalCount').textContent  = total;
+  const totalEl = document.getElementById('statTotal');
+  if (totalEl) totalEl.textContent = total;
+  
+  const todayEl = document.getElementById('statToday');
+  if (todayEl) todayEl.textContent = todayRows.length;
 
-  if (todayRows.length) {
-    document.getElementById('todayBadge').style.display = '';
-    document.getElementById('todayCount').textContent   = todayRows.length;
+  const weekEl = document.getElementById('statWeek');
+  if (weekEl) weekEl.textContent = weekRows.length;
+
+  const serviceEl = document.getElementById('statService');
+  if (serviceEl) serviceEl.textContent = topSvc ? topSvc[0].split(' ')[0] : '—';
+
+  const totalCountEl = document.getElementById('totalCount');
+  if (totalCountEl) totalCountEl.textContent = total;
+
+  const todayBadge = document.getElementById('todayBadge');
+  const todayCount = document.getElementById('todayCount');
+  if (todayRows.length && todayBadge && todayCount) {
+    todayBadge.style.display = '';
+    todayCount.textContent = todayRows.length;
+  } else if (todayBadge) {
+    todayBadge.style.display = 'none';
   }
 }
 
@@ -126,15 +215,6 @@ function updateStats() {
 // FILTERS & SEARCH
 // ===========================
 let searchTerm = '', serviceFilter = '';
-
-document.getElementById('searchInput').addEventListener('input', e => {
-  searchTerm = e.target.value.toLowerCase();
-  currentPage = 1; applyFilters();
-});
-document.getElementById('serviceFilter').addEventListener('change', e => {
-  serviceFilter = e.target.value;
-  currentPage = 1; applyFilters();
-});
 
 function applyFilters() {
   filtered = allRows.filter(r => {
@@ -156,14 +236,18 @@ function applyFilters() {
 // TABLE RENDER
 // ===========================
 function setTableLoading() {
-  document.getElementById('tableBody').innerHTML =
-    `<tr class="state-row"><td colspan="11"><div class="spinner"></div><br><br>Loading…</td></tr>`;
+  const tbody = document.getElementById('tableBody');
+  if (tbody) {
+    tbody.innerHTML = `<tr class="state-row"><td colspan="11"><div class="spinner"></div><br><br>Loading…</td></tr>`;
+  }
 }
 
 function renderTable() {
   const tbody = document.getElementById('tableBody');
-  const start = (currentPage-1)*PER_PAGE;
-  const rows  = filtered.slice(start, start+PER_PAGE);
+  if (!tbody) return;
+
+  const start = (currentPage - 1) * PER_PAGE;
+  const rows  = filtered.slice(start, start + PER_PAGE);
 
   if (!rows.length) {
     tbody.innerHTML = `<tr class="state-row"><td colspan="11">No messages found.</td></tr>`;
@@ -200,7 +284,10 @@ function renderTable() {
       const id = e.target.dataset.id;
       if (e.target.checked) selected.add(id); else selected.delete(id);
       updateDeleteBtn();
-      document.getElementById('selectAll').checked = selected.size === rows.length;
+      const selectAllCheckbox = document.getElementById('selectAll');
+      if (selectAllCheckbox) {
+        selectAllCheckbox.checked = selected.size === rows.length;
+      }
     });
   });
 }
@@ -209,16 +296,9 @@ function esc(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// Select all
-document.getElementById('selectAll').addEventListener('change', e => {
-  const start = (currentPage-1)*PER_PAGE;
-  const rows  = filtered.slice(start, start+PER_PAGE);
-  rows.forEach(r => { e.target.checked ? selected.add(r.id) : selected.delete(r.id); });
-  renderTable(); updateDeleteBtn();
-});
-
 function updateDeleteBtn() {
   const btn = document.getElementById('deleteSelectedBtn');
+  if (!btn) return;
   btn.style.display = selected.size > 0 ? '' : 'none';
   btn.textContent = `🗑 Delete Selected (${selected.size})`;
 }
@@ -230,6 +310,7 @@ function renderPagination() {
   const total = filtered.length;
   const pages = Math.ceil(total/PER_PAGE);
   const el = document.getElementById('pagination');
+  if (!el) return;
   if (pages <= 1) { el.innerHTML=''; return; }
 
   let html = `<span class="page-info">${total} results</span>`;
@@ -270,46 +351,9 @@ async function deleteRow(id) {
   }
 }
 
-document.getElementById('deleteSelectedBtn').onclick = async () => {
-  if (!selected.size) return;
-  if (!confirm(`Delete ${selected.size} selected message(s)?`)) return;
-  const ids = [...selected];
-  try {
-    const { error } = await sb.from('contact_messages').delete().in('id', ids);
-    if (error) throw error;
-    allRows = allRows.filter(r => !selected.has(r.id));
-    selected.clear(); applyFilters(); updateStats();
-    showToast(`${ids.length} message(s) deleted.`, 'ok');
-  } catch (err) {
-    showToast('Bulk delete failed: ' + err.message, 'err');
-  }
-};
-
-// ===========================
-// EXPORT CSV
-// ===========================
-document.getElementById('exportBtn').onclick = () => {
-  const cols = ['id','name','brand','email','service','budget','timeline','brief','created_at'];
-  const esc  = v => `"${String(v||'').replace(/"/g,'""')}"`;
-  const rows = [cols.join(','), ...filtered.map(r => cols.map(c=>esc(r[c])).join(','))];
-  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `inquiries_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  showToast('CSV exported!', 'ok');
-};
-
-// ===========================
-// REFRESH
-// ===========================
-document.getElementById('refreshBtn').onclick = () => loadData();
-
 // ===========================
 // DETAIL MODAL
 // ===========================
-const detailOverlay = document.getElementById('detailOverlay');
-
 function openDetail(r) {
   if (typeof r === 'string') {
     try {
@@ -318,6 +362,11 @@ function openDetail(r) {
       r = allRows.find(item => String(item.id) === String(r));
     }
   }
+  if (!r) return;
+
+  const detailOverlay = document.getElementById('detailOverlay');
+  if (!detailOverlay) return;
+
   document.getElementById('detailName').textContent    = r.name    || '—';
   document.getElementById('detailEmail').textContent   = r.email   || '—';
   document.getElementById('detailBrand').textContent   = r.brand   || '—';
@@ -336,10 +385,15 @@ function openDetail(r) {
   detailOverlay.classList.add('open');
 }
 
-function closeDetail() { detailOverlay.classList.remove('open'); }
-document.getElementById('detailClose').onclick = closeDetail;
-detailOverlay.addEventListener('click', e => { if(e.target===detailOverlay) closeDetail(); });
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeDetail(); });
+function closeDetail() {
+  const detailOverlay = document.getElementById('detailOverlay');
+  if (detailOverlay) detailOverlay.classList.remove('open');
+}
+
+// Escape key for modal closing
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDetail();
+});
 
 // ===========================
 // TOAST NOTIFICATION
@@ -347,6 +401,7 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeDetail(); 
 let toastTimer;
 function showToast(msg, type='ok') {
   const t = document.getElementById('toast');
+  if (!t) return;
   t.textContent = msg;
   t.className = `toast ${type} show`;
   clearTimeout(toastTimer);
@@ -356,3 +411,4 @@ function showToast(msg, type='ok') {
 // Export functions to window so inline onclick handlers can call them
 window.deleteRow = deleteRow;
 window.openDetail = openDetail;
+window.goPage = goPage;
