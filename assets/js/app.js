@@ -260,11 +260,20 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-up, .re
   .forEach(x => revealObs.observe(x));
 
 // ===========================
-// HEADER SCROLL
+// HEADER SCROLL & PROGRESS
 // ===========================
 const headerEl = document.getElementById('header');
+const progressEl = document.getElementById('scrollProgress');
 window.addEventListener('scroll', () => {
-  headerEl.classList.toggle('scrolled', window.scrollY > 18);
+  const sy = window.scrollY;
+  headerEl.classList.toggle('scrolled', sy > 18);
+  if (progressEl) {
+    const h = document.documentElement,
+          b = document.body,
+          sh = 'scrollHeight';
+    const pct = sy / (h[sh] - h.clientHeight) * 100;
+    progressEl.style.width = pct + '%';
+  }
 }, { passive: true });
 
 // ===========================

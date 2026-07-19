@@ -58,6 +58,19 @@ img {
   margin-inline: auto;
 }
 
+/* ===== SCROLL PROGRESS BAR ===== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-deep));
+  z-index: 100;
+  pointer-events: none;
+  transition: width 0.08s ease-out;
+}
+
 /* ===== NOISE OVERLAY ===== */
 .noise {
   position: fixed;
@@ -149,10 +162,26 @@ nav {
 .navlinks a {
   font-size: .87rem;
   color: var(--soft);
-  transition: color .2s;
+  position: relative;
+  padding-block: 6px;
+  transition: color .3s var(--ease);
+}
+.navlinks a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: translateX(-50%);
+  transition: width .3s var(--ease);
 }
 .navlinks a:hover {
-  color: var(--accent);
+  color: var(--paper);
+}
+.navlinks a:hover::after {
+  width: 100%;
 }
 .button {
   min-height: 46px;
@@ -167,20 +196,40 @@ nav {
   align-items: center;
   justify-content: center;
   gap: 9px;
-  transition: transform .25s var(--ease), background .25s;
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s var(--ease), background .25s, color .25s, box-shadow .25s;
+}
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform .6s var(--ease);
 }
 .button:hover {
   transform: translateY(-2px);
-  background: var(--paper);
+  background: var(--accent-deep);
+  color: var(--paper);
+  box-shadow: 0 8px 24px rgba(255, 110, 64, 0.25);
+}
+.button:hover::after {
+  transform: translateX(100%) skewX(-15deg);
 }
 .button.secondary {
   background: transparent;
   color: var(--paper);
   border: 1px solid var(--line);
 }
+.button.secondary::after {
+  display: none;
+}
 .button.secondary:hover {
   border-color: var(--accent);
   color: var(--accent);
+  background: rgba(255, 110, 64, 0.04);
+  box-shadow: none;
 }
 .hamb {
   display: none;
@@ -951,19 +1000,7 @@ textarea {
   margin-top: 4px;
 }
 .submit-btn {
-  position: relative;
-  overflow: hidden;
-}
-.submit-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-  transform: translateX(-100%);
-  transition: transform .5s var(--ease);
-}
-.submit-btn:hover::after {
-  transform: translateX(100%);
+  /* Inherits sheen and shadow animations from .button */
 }
 
 /* ===== EMAIL MODAL ===== */
