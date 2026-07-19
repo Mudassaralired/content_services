@@ -245,13 +245,15 @@ window.addEventListener('load', () => {
 });
 
 // ===========================
-// SCROLL REVEAL
+// SCROLL REVEAL (Repeated Entry/Exit)
 // ===========================
 const revealObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       e.target.classList.add('in');
-      revealObs.unobserve(e.target);
+    } else {
+      // Reset animation when element leaves the screen
+      e.target.classList.remove('in');
     }
   });
 }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
