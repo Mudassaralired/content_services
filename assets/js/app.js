@@ -185,7 +185,7 @@ document.querySelectorAll('.filter').forEach(btn => btn.onclick = () => {
 // ===========================
 (function initTestimonials() {
   const avatarGradients = [
-    'linear-gradient(135deg,#8b5cf6,#7c3aed)',
+    'linear-gradient(135deg,#ff6e40,#e04a1f)',
     'linear-gradient(135deg,#3b82f6,#1d4ed8)',
     'linear-gradient(135deg,#ec4899,#be185d)',
     'linear-gradient(135deg,#10b981,#047857)',
