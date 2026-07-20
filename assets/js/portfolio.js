@@ -56,9 +56,9 @@ function getCloudinaryThumb(videoUrl) {
 const ringTrack = document.getElementById('ringTrack');
 let activeCategory = 'all';
 
-// The ring displays all videos of the selected category, densely packed
+// The ring always displays all 40 videos as a static showcase
 function getRingVideos() {
-  return videos.filter(v => activeCategory === 'all' || v.cat === activeCategory);
+  return videos;
 }
 
 function renderRing() {
@@ -193,8 +193,11 @@ function spinLoop() {
   currentRotationY += (targetRotationY - currentRotationY) * 0.08;
   
   if (ringTrack) {
-    // rotateX(-12deg) tilts the entire ring circle towards the viewer
-    ringTrack.style.transform = `rotateX(-12deg) rotateY(${currentRotationY}deg)`;
+    const isMobile = window.innerWidth < 768;
+    // Push the ring back in 3D Z-space to prevent clipping and fit the complete 360 degree circle on screen
+    const translateZ = isMobile ? -230 : -330;
+    const tiltX = isMobile ? -8 : -11;
+    ringTrack.style.transform = `translate3d(0, 0, ${translateZ}px) rotateX(${tiltX}deg) rotateY(${currentRotationY}deg)`;
   }
   requestAnimationFrame(spinLoop);
 }
@@ -340,19 +343,10 @@ filterButtons.forEach(btn => {
     btn.classList.add('active');
     
     const cat = btn.dataset.category;
-    activeCategory = cat;
     activeGridFilter = cat;
     displayedCount = PAGE_SIZE;
 
-    // Smoothly re-render the 3D ring
-    if (ringTrack) {
-      ringTrack.style.opacity = '0';
-      setTimeout(() => {
-        renderRing();
-        ringTrack.style.opacity = '1';
-      }, 350);
-    }
-    // Re-render grid
+    // Re-render grid (Ring remains static/unfiltered)
     renderGrid(false);
   });
 });
