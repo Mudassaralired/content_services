@@ -2,8 +2,11 @@ const CACHE_NAME = 'mudassar-portfolio-v1';
 const ASSETS = [
   './',
   './index.html',
+  './portfolio.html',
   './assets/css/style.css',
+  './assets/css/portfolio.css',
   './assets/js/app.js',
+  './assets/js/portfolio.js',
   './assets/brand/logo.svg'
 ];
 

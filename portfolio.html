@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive Video Gallery | Mudassar Ali</title>
+<meta name="description" content="Explore an interactive 3D video gallery showcase of AI commercials, product films, and 3D motion by Mudassar Ali.">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/svg+xml" href="assets/brand/logo.svg">
+<link rel="shortcut icon" href="assets/brand/logo.svg">
+
+<!-- Preconnect -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com">
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+<!-- Main Style Sheets -->
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/portfolio.css">
+</head>
+<body>
+<!-- Scroll progress bar -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+<!-- Noise overlay -->
+<div class="noise" aria-hidden="true"></div>
+<!-- Custom cursor -->
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<!-- ===== HEADER ===== -->
+<header id="header">
+  <nav class="wrap">
+    <a href="index.html" class="brand" data-cursor>
+      <span class="brand-mark"></span>Mudassar Ali
+    </a>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="index.html#work" data-cursor>Work</a></li>
+      <li><a href="index.html#services" data-cursor>Services</a></li>
+      <li><a href="index.html#process" data-cursor>Process</a></li>
+      <li><a href="index.html#testimonials" data-cursor>Reviews</a></li>
+      <li><a href="index.html#contact" data-cursor>Contact</a></li>
+    </ul>
+    <a href="index.html#contact" class="button nav-cta" data-cursor>Start a project</a>
+    <button class="hamb" id="hamb" aria-label="Open menu">☰</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ===== HERO DRAG STAGE ===== -->
+  <section class="portfolio-hero">
+    <div class="wrap">
+      <span class="badge-mini reveal" style="margin-bottom:12px">Interactive Stage</span>
+      <h1 class="reveal"><span style="color:var(--accent)">3D Video Reel</span> Gallery.</h1>
+      <p class="reveal">Drag left or right to spin the ring. Hover over any card for a looping video preview, and click to view full screen.</p>
+      
+      <!-- 3D Ring Stage -->
+      <div class="ring-stage reveal" id="ringContainer">
+        <div class="ring-track" id="ringTrack">
+          <!-- Dynamically populated in portfolio.js -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY SECTION ===== -->
+  <section class="gallery-section">
+    <div class="wrap">
+      
+      <!-- Toolbar -->
+      <div class="gallery-toolbar reveal-up">
+        <div class="filter-pills">
+          <button class="filter-pill active" data-category="all" data-cursor>All Work</button>
+          <button class="filter-pill" data-category="motion" data-cursor>CGI &amp; Motion</button>
+          <button class="filter-pill" data-category="commercial" data-cursor>Commercials</button>
+          <button class="filter-pill" data-category="ugc" data-cursor>UGC &amp; Social Ads</button>
+        </div>
+        <div class="search-wrap">
+          <input type="text" id="searchBar" placeholder="🔍  Search catalog by name…">
+        </div>
+      </div>
+
+      <!-- Video Grid -->
+      <div class="video-grid" id="gridContainer">
+        <!-- Dynamically populated in portfolio.js -->
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-top">
+      <h2>Mudassar Ali, AI Video &amp; Motion Director.</h2>
+      <div class="footer-links">
+        <a href="index.html#work" data-cursor>Work</a>
+        <a href="index.html#services" data-cursor>Services</a>
+        <a href="index.html#process" data-cursor>Process</a>
+        <a href="index.html#testimonials" data-cursor>Reviews</a>
+        <a href="index.html#contact" data-cursor>Contact</a>
+        <a href="admin.html" data-cursor style="opacity: 0.5; font-size: 0.8rem; margin-left: 10px; border-left: 1px solid var(--line); padding-left: 14px;">Dashboard</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Mudassar Ali. Independent practice, available worldwide.</span>
+      <div class="footer-socials">
+        <a href="https://vimeo.com/" target="_blank" rel="noopener" aria-label="Vimeo Portfolio" data-cursor>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="soc-icon"><path d="M22.3 8.3c-.1 2-1.5 4.8-4.1 8.4-2.7 3.7-5 5.5-7 5.5-1.2 0-2.2-1.1-3-3.3-.5-1.9-1.1-3.9-1.7-5.9-.6-2.2-1.3-3.3-2-3.3-.2 0-.8.4-1.8 1.2L1.5 9.4c1.2-1 2.4-2.1 3.7-3.2 1.8-1.5 3.1-2.3 4-2.3 2.1 0 3.2 1.4 3.4 4.3.2 2.4.7 4.9 1.4 7.4.5 1.7.9 2.6 1.4 2.6.4 0 1-.9 1.9-2.7.9-1.7.9-2.9.1-3.6-.8-.7-2.3-.5-2.3-.5 1-.9 2.5-2.2 4.4-2.4 1.8-.2 2.7 1 2.8 3.5z"/></svg>
+        </a>
+        <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn Profile" data-cursor>
+          <svg viewBox="0 0 24 24" fill="currentColor" class="soc-icon"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        </a>
+        <a href="https://wa.me/923481321775" target="_blank" rel="noopener" aria-label="WhatsApp Chat" data-cursor>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="soc-icon"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.2-5.3A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8.5 9c0 4 3 6.5 6.5 6.5"/></svg>
+        </a>
+      </div>
+      <span>banmance5@gmail.com</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CINEMATIC LIGHTBOX VIEWER ===== -->
+<div class="lightbox-overlay" id="videoLightbox">
+  <div class="lightbox-content">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close video player">×</button>
+    <div class="lightbox-video-container">
+      <video id="lightboxVideo" controls controlsList="nodownload" playsinline></video>
+    </div>
+    <div class="lightbox-meta">
+      <h2 id="lightboxTitle">Project Title</h2>
+      <p id="lightboxDesc">Project description goes here.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/portfolio.js" defer></script>
+</body>
+</html>
