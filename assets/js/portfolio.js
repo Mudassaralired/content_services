@@ -32,7 +32,7 @@ const videos = [
   { id: '28', title: 'Ethnic Kitchen Ad', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532560/ethnikichen_pv65pm.mp4', cat: 'ugc', desc: 'Food UGC ad showcasing recipe preparation, close macro shots, and voiceover.' },
   { id: '29', title: 'Air Filter CGI', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532595/air_filer_add_majrpn.mp4', cat: 'motion', desc: '3D CGI film showing air particles passing through multi-stage filter systems.' },
   { id: '30', title: 'Dressing Room Promo', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532607/dressing_add_td7ndl.mp4', cat: 'commercial', desc: 'High-contrast fashion commercial showcasing lighting overlays and fabric movements.' },
-  { id: '31', title: 'Churaili Ad', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532611/churaili_ad_izpqty.mp4', cat: 'ugc', desc: 'Fast-paced UGC social ad with visual overlays and dynamic subtitles.' },
+  { id: '31', title: 'Churaili Ad', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532611/churaili_ad_izpqty.mp4', cat: 'ugc', desc: 'Churaili concept social ad with visual overlays and dynamic subtitle templates.' },
   { id: '32', title: 'Fat Loss System', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532704/fat_lose_add_dl9ahb.mp4', cat: 'ugc', desc: 'Before/after lifestyle UGC detailing fitness progress and nutrition guides.' },
   { id: '33', title: 'Fat Loss System II', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532813/fat_lose_add2_zu4ega.mp4', cat: 'ugc', desc: 'Secondary social-ad campaign for fat loss, focused on simple meal prep.' },
   { id: '34', title: 'Fat Loss System III', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532897/fat_lose_add3_t2wbtq.mp4', cat: 'ugc', desc: 'Third variation in social-ad campaign, testing client hooks and overlays.' },
@@ -51,16 +51,14 @@ function getCloudinaryThumb(videoUrl) {
 }
 
 // ===========================
-// INITIALIZE 3D ROTATING RING
+// INITIALIZE 3D ROTATING RING (Tilted Vertical Card Ring)
 // ===========================
 const ringTrack = document.getElementById('ringTrack');
 let activeCategory = 'all';
 
-// Select 12 items for the 3D ring (curated from all videos)
+// The ring displays all videos of the selected category, densely packed
 function getRingVideos() {
-  const filtered = videos.filter(v => activeCategory === 'all' || v.cat === activeCategory);
-  // Take up to 12 items
-  return filtered.slice(0, 12);
+  return videos.filter(v => activeCategory === 'all' || v.cat === activeCategory);
 }
 
 function renderRing() {
@@ -70,14 +68,17 @@ function renderRing() {
   const ringVideos = getRingVideos();
   const total = ringVideos.length;
   if (!total) {
-    ringTrack.innerHTML = '<div style="color:var(--soft);text-align:center;grid-column:1/-1">No videos available in this category.</div>';
+    ringTrack.innerHTML = '<div style="color:var(--soft);text-align:center;grid-column:1/-1">No videos available.</div>';
     return;
   }
 
   // Calculate layout parameters
-  // Desktop radius is around 480px, mobile drops to 230px
   const isMobile = window.innerWidth < 768;
-  const radius = isMobile ? 240 : 480;
+  const cardWidth = isMobile ? 60 : 86;
+  
+  // Circumference based radius packing R = C / 2pi
+  // Ensure a minimum radius for layout balance
+  const radius = Math.max(isMobile ? 220 : 560, (total * cardWidth) / (2 * Math.PI));
 
   ringVideos.forEach((v, index) => {
     const angle = (360 / total) * index;
@@ -86,44 +87,26 @@ function renderRing() {
     card.setAttribute('data-id', v.id);
     card.setAttribute('data-cursor', '');
     
-    // Set 3D positions
-    card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+    // Position on ring: Y rotation + Z translation
+    // Inverse rotateX(12deg) aligns the card vertically to stand upright (offsetting the track's -12deg tilt)
+    card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px) rotateX(12deg)`;
 
     const thumbUrl = getCloudinaryThumb(v.url);
 
     card.innerHTML = `
       <div class="ring-card-inner">
         <img class="ring-card-thumb" src="${thumbUrl}" alt="${v.title}" loading="lazy">
-        <div class="ring-card-preview"></div>
         <div class="ring-card-meta">
-          <span class="badge-mini">${v.cat === 'motion' ? 'CGI & Motion' : v.cat === 'commercial' ? 'Commercial' : 'UGC Ad'}</span>
+          <span class="badge-mini">${v.cat === 'motion' ? 'CGI' : v.cat === 'commercial' ? 'Comm' : 'UGC'}</span>
           <h3>${v.title}</h3>
         </div>
       </div>
     `;
 
     // Click handler (ignores click if drag occurred)
-    card.addEventListener('click', (e) => {
+    card.addEventListener('click', () => {
       if (isDraggingRing) return;
       openLightbox(v);
-    });
-
-    // Hover previews
-    card.addEventListener('mouseenter', () => {
-      if (isDraggingRing) return;
-      const preview = card.querySelector('.ring-card-preview');
-      if (preview) {
-        preview.innerHTML = `<video src="${v.url}" autoplay loop muted playsinline class="video-preview-stream"></video>`;
-        preview.style.opacity = '1';
-      }
-    });
-
-    card.addEventListener('mouseleave', () => {
-      const preview = card.querySelector('.ring-card-preview');
-      if (preview) {
-        preview.style.opacity = '0';
-        setTimeout(() => { preview.innerHTML = ''; }, 300);
-      }
     });
 
     ringTrack.appendChild(card);
@@ -137,8 +120,7 @@ let isDraggingRing = false;
 let startX = 0;
 let currentRotationY = 0;
 let targetRotationY = 0;
-let autoSpinSpeed = 0.08; // Degree increment per frame
-let lastMoveTime = 0;
+let autoSpinSpeed = 0.08; // Continuous slow spin
 let velocity = 0;
 let isHoveringRing = false;
 
@@ -156,15 +138,14 @@ if (ringContainer) {
     if (!isDraggingRing) return;
     const dx = e.clientX - startX;
     startX = e.clientX;
-    targetRotationY += dx * 0.18; // Sensivity scale
-    velocity = dx * 0.18;
+    targetRotationY += dx * 0.16; // sensitivity
+    velocity = dx * 0.16;
   });
 
   window.addEventListener('mouseup', () => {
     if (!isDraggingRing) return;
-    // Keep velocity for inertia slide
     isDraggingRing = false;
-    autoSpinSpeed = isHoveringRing ? 0 : 0.08;
+    autoSpinSpeed = isHoveringRing ? 0.02 : 0.08;
   });
 
   // Touch Swipe (Mobile)
@@ -179,8 +160,8 @@ if (ringContainer) {
     if (!isDraggingRing) return;
     const dx = e.touches[0].clientX - startX;
     startX = e.touches[0].clientX;
-    targetRotationY += dx * 0.18;
-    velocity = dx * 0.18;
+    targetRotationY += dx * 0.16;
+    velocity = dx * 0.16;
   }, { passive: true });
 
   ringContainer.addEventListener('touchend', () => {
@@ -188,7 +169,7 @@ if (ringContainer) {
     autoSpinSpeed = 0.08;
   });
 
-  // Slow down when hovering
+  // Slow auto-spin on hover
   ringContainer.addEventListener('mouseenter', () => {
     isHoveringRing = true;
     if (!isDraggingRing) autoSpinSpeed = 0.02;
@@ -199,56 +180,65 @@ if (ringContainer) {
   });
 }
 
-// Main physics render loop
+// Main physics loop
 function spinLoop() {
   if (!isDraggingRing) {
-    // Apply auto spin
     targetRotationY += autoSpinSpeed;
-    
-    // Apply inertia slide if any velocity remains
     if (Math.abs(velocity) > 0.02) {
       targetRotationY += velocity;
-      velocity *= 0.94; // friction coefficient
+      velocity *= 0.94; // inertia slide dampening
     }
   }
 
-  // Smooth lerp interpolation
   currentRotationY += (targetRotationY - currentRotationY) * 0.08;
   
   if (ringTrack) {
-    ringTrack.style.transform = `rotateY(${currentRotationY}deg)`;
+    // rotateX(-12deg) tilts the entire ring circle towards the viewer
+    ringTrack.style.transform = `rotateX(-12deg) rotateY(${currentRotationY}deg)`;
   }
   requestAnimationFrame(spinLoop);
 }
 
-// Start physics loop on load
 if (ringTrack) {
   requestAnimationFrame(spinLoop);
 }
 
 // ===========================
-// GRID GALLERY & FILTERS
+// GRID GALLERY - PAGINATED LOAD MORE
 // ===========================
 const gridContainer = document.getElementById('gridContainer');
 const searchInput = document.getElementById('searchBar');
 const filterButtons = document.querySelectorAll('.filter-pill');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const loadMoreWrap = document.getElementById('loadMoreWrap');
 
+const PAGE_SIZE = 8; // Render step size
+let displayedCount = PAGE_SIZE;
 let activeGridFilter = 'all';
 let searchQuery = '';
 
-function renderGrid() {
-  if (!gridContainer) return;
-  gridContainer.innerHTML = '';
-
-  const filtered = videos.filter(v => {
+function getFilteredList() {
+  return videos.filter(v => {
     const matchFilter = activeGridFilter === 'all' || v.cat === activeGridFilter;
     const matchSearch = !searchQuery || 
       v.title.toLowerCase().includes(searchQuery) || 
       v.desc.toLowerCase().includes(searchQuery);
     return matchFilter && matchSearch;
   });
+}
 
-  if (!filtered.length) {
+// Renders the grid with simulated skeleton shimmers for high-end feel
+function renderGrid(append = false) {
+  if (!gridContainer) return;
+  
+  const filtered = getFilteredList();
+  
+  // Show / Hide Load More
+  if (loadMoreWrap) {
+    loadMoreWrap.style.display = displayedCount >= filtered.length ? 'none' : '';
+  }
+
+  if (filtered.length === 0) {
     gridContainer.innerHTML = `
       <div class="empty-state">
         <h3>No videos match your search</h3>
@@ -258,58 +248,92 @@ function renderGrid() {
     return;
   }
 
-  filtered.forEach(v => {
-    const card = document.createElement('article');
-    card.className = 'grid-card reveal-up in';
-    card.setAttribute('data-cursor', '');
+  const itemsToRender = filtered.slice(0, displayedCount);
 
-    const thumb = getCloudinaryThumb(v.url);
+  if (append) {
+    // Append logic: render loading skeletons at the bottom first
+    const skeletonCount = Math.min(PAGE_SIZE, filtered.length - (displayedCount - PAGE_SIZE));
+    const skeletonDivs = [];
+    
+    for (let i = 0; i < skeletonCount; i++) {
+      const sk = document.createElement('div');
+      sk.className = 'skeleton';
+      gridContainer.appendChild(sk);
+      skeletonDivs.push(sk);
+    }
 
-    card.innerHTML = `
-      <div class="grid-card-media">
-        <img src="${thumb}" alt="${v.title}" loading="lazy">
-        <div class="grid-card-preview"></div>
-        <span class="badge-mini absolute">${v.cat === 'motion' ? 'CGI & Motion' : v.cat === 'commercial' ? 'Commercial' : 'UGC Ad'}</span>
-      </div>
-      <div class="grid-card-info">
-        <h3>${v.title}</h3>
-        <p>${v.desc}</p>
-      </div>
-    `;
+    // Scroll smoothly to loading elements
+    if (skeletonDivs[0]) {
+      skeletonDivs[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 
-    // Click opens Lightbox
-    card.addEventListener('click', () => openLightbox(v));
+    setTimeout(() => {
+      // Remove skeletons
+      skeletonDivs.forEach(s => s.remove());
+      
+      // Append actual cards
+      const sliceStart = displayedCount - PAGE_SIZE;
+      const sliceItems = filtered.slice(sliceStart, displayedCount);
+      sliceItems.forEach(v => appendCard(v));
+    }, 450);
+  } else {
+    // Initial / Filter load: show skeletons for the whole grid
+    gridContainer.innerHTML = '';
+    const initialSkeletons = Math.min(PAGE_SIZE, filtered.length);
+    for (let i = 0; i < initialSkeletons; i++) {
+      const sk = document.createElement('div');
+      sk.className = 'skeleton';
+      gridContainer.appendChild(sk);
+    }
 
-    // Hover loops preview
-    card.addEventListener('mouseenter', () => {
-      const preview = card.querySelector('.grid-card-preview');
-      if (preview) {
-        preview.innerHTML = `<video src="${v.url}" autoplay loop muted playsinline></video>`;
-        preview.style.opacity = '1';
-      }
-    });
-
-    card.addEventListener('mouseleave', () => {
-      const preview = card.querySelector('.grid-card-preview');
-      if (preview) {
-        preview.style.opacity = '0';
-        setTimeout(() => { preview.innerHTML = ''; }, 300);
-      }
-    });
-
-    gridContainer.appendChild(card);
-  });
+    setTimeout(() => {
+      gridContainer.innerHTML = '';
+      itemsToRender.forEach(v => appendCard(v));
+    }, 400);
+  }
 }
 
-// Bind search input
+// Single card builder (strict static thumbnail - no hover videos for optimal speed)
+function appendCard(v) {
+  const card = document.createElement('article');
+  card.className = 'grid-card reveal-up in';
+  card.setAttribute('data-cursor', '');
+
+  const thumb = getCloudinaryThumb(v.url);
+
+  card.innerHTML = `
+    <div class="grid-card-media">
+      <img src="${thumb}" alt="${v.title}" loading="lazy">
+      <span class="badge-mini absolute">${v.cat === 'motion' ? 'CGI' : v.cat === 'commercial' ? 'Comm' : 'UGC'}</span>
+    </div>
+    <div class="grid-card-info">
+      <h3>${v.title}</h3>
+      <p>${v.desc}</p>
+    </div>
+  `;
+
+  card.addEventListener('click', () => openLightbox(v));
+  gridContainer.appendChild(card);
+}
+
+// Load More Click listener
+if (loadMoreBtn) {
+  loadMoreBtn.onclick = () => {
+    displayedCount += PAGE_SIZE;
+    renderGrid(true);
+  };
+}
+
+// Search input listener
 if (searchInput) {
   searchInput.addEventListener('input', e => {
     searchQuery = e.target.value.toLowerCase().trim();
-    renderGrid();
+    displayedCount = PAGE_SIZE;
+    renderGrid(false);
   });
 }
 
-// Bind category filter pills
+// Category filter pills
 filterButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     filterButtons.forEach(b => b.classList.remove('active'));
@@ -318,8 +342,9 @@ filterButtons.forEach(btn => {
     const cat = btn.dataset.category;
     activeCategory = cat;
     activeGridFilter = cat;
+    displayedCount = PAGE_SIZE;
 
-    // Smoothly re-render both elements
+    // Smoothly re-render the 3D ring
     if (ringTrack) {
       ringTrack.style.opacity = '0';
       setTimeout(() => {
@@ -327,7 +352,8 @@ filterButtons.forEach(btn => {
         ringTrack.style.opacity = '1';
       }, 350);
     }
-    renderGrid();
+    // Re-render grid
+    renderGrid(false);
   });
 });
 
@@ -344,13 +370,14 @@ function openLightbox(v) {
   if (!lightbox || !lightboxVideo) return;
   lightboxTitle.textContent = v.title;
   lightboxDesc.textContent = v.desc;
+  
+  // Set video source (strict click-to-load)
   lightboxVideo.src = v.url;
   lightboxVideo.load();
   
   lightbox.classList.add('open');
   lightboxVideo.play().catch(err => console.log('Autoplay blocked:', err));
 
-  // Disable page scroll
   document.body.style.overflow = 'hidden';
 }
 
@@ -360,7 +387,6 @@ function closeLightbox() {
   lightboxVideo.pause();
   lightboxVideo.src = '';
   
-  // Re-enable page scroll
   document.body.style.overflow = '';
 }
 
@@ -377,14 +403,12 @@ document.addEventListener('keydown', e => {
 });
 
 // ===========================
-// BOOTSTRAP INITIALIZATION
+// INITIALIZE
 // ===========================
 window.addEventListener('resize', () => {
-  // Re-render ring positions on resize to keep radius responsive
   renderRing();
 });
 
-// Load resources on document ready
 document.addEventListener('DOMContentLoaded', () => {
   renderRing();
   renderGrid();

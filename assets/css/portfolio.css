@@ -17,7 +17,7 @@
 .portfolio-hero p {
   color: var(--soft);
   max-width: 52ch;
-  margin: 0 auto 48px;
+  margin: 0 auto 36px;
   font-size: clamp(1rem, 1.5vw, 1.15rem);
 }
 
@@ -25,12 +25,12 @@
 .ring-stage {
   position: relative;
   width: 100%;
-  height: 380px;
+  height: 440px;
   margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1200px;
+  perspective: 1400px;
   cursor: grab;
   user-select: none;
 }
@@ -46,14 +46,15 @@
   transition: opacity 0.35s var(--ease);
 }
 
+/* Narrow & tall vertical cards matching reference image */
 .ring-card {
   position: absolute;
-  width: 260px;
-  height: 150px;
+  width: 86px;
+  height: 154px;
   left: 50%;
   top: 50%;
-  margin-left: -130px; /* half of width */
-  margin-top: -75px;  /* half of height */
+  margin-left: -43px; /* half of width */
+  margin-top: -77px;  /* half of height */
   transform-style: preserve-3d;
   backface-visibility: hidden;
   transition: transform 0.1s ease-out;
@@ -63,7 +64,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 12px;
+  border-radius: 6px;
   border: 1px solid var(--line);
   background: var(--ink-2);
   overflow: hidden;
@@ -72,53 +73,53 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* Hover play overlay for ring cards */
+.ring-card-inner::after {
+  content: "▶";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(13, 12, 16, 0.4);
+  color: var(--accent);
+  font-size: 1.2rem;
+  opacity: 0;
+  z-index: 3;
+  transition: opacity 0.3s var(--ease);
+  pointer-events: none;
+}
+.ring-card:hover .ring-card-inner::after {
+  opacity: 1;
+}
+
 .ring-card:hover .ring-card-inner {
-  transform: scale(1.05);
+  transform: scale(1.08) translateZ(10px);
   border-color: var(--accent);
-  box-shadow: 0 8px 32px rgba(255, 110, 64, 0.25);
+  box-shadow: 0 8px 32px rgba(255, 110, 64, 0.3);
 }
 
 .ring-card-thumb {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.82;
+  opacity: 0.85;
   transition: opacity 0.3s;
-}
-.ring-card:hover .ring-card-thumb {
-  opacity: 0;
-}
-
-.ring-card-preview {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: var(--ink);
-  transition: opacity 0.3s var(--ease);
-}
-.ring-card-preview video,
-.video-preview-stream {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .ring-card-meta {
   position: absolute;
   inset: auto 0 0;
   z-index: 3;
-  padding: 16px;
+  padding: 8px;
   background: linear-gradient(transparent, rgba(13, 12, 16, 0.95) 75%);
   pointer-events: none;
   text-align: left;
 }
 .ring-card-meta h3 {
-  font-size: 1rem;
+  font-size: 0.65rem;
   font-weight: 700;
   color: var(--paper);
-  margin-top: 4px;
+  margin-top: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -142,6 +143,11 @@
   left: 12px;
   z-index: 3;
   backdrop-filter: blur(4px);
+}
+.ring-card-meta .badge-mini {
+  font-size: 0.45rem;
+  padding: 1px 4px;
+  border-radius: 2px;
 }
 
 /* ===== FILTER BAR & SEARCH ===== */
@@ -201,6 +207,30 @@
   box-shadow: 0 0 16px rgba(255, 110, 64, 0.1);
 }
 
+/* ===== SKELETON SHIMMER LOADER ===== */
+.skeleton {
+  position: relative;
+  background: var(--ink-3);
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  aspect-ratio: 16/9.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 110, 64, 0.03), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 /* ===== VIDEO GRID GALLERY ===== */
 .video-grid {
   display: grid;
@@ -235,25 +265,29 @@
   height: 100%;
   object-fit: cover;
   opacity: 0.85;
-  transition: opacity 0.3s;
+  transition: transform 0.4s var(--ease);
 }
 .grid-card:hover .grid-card-media img {
-  opacity: 0;
+  transform: scale(1.02);
 }
 
-.grid-card-preview {
+/* Play button overlay on grid card hover */
+.grid-card-media::after {
+  content: "▶";
   position: absolute;
   inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(13, 12, 16, 0.4);
+  color: var(--accent);
+  font-size: 1.8rem;
   opacity: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: var(--ink);
-  transition: opacity 0.3s var(--ease);
+  z-index: 3;
+  transition: opacity 0.3s var(--ease), background-color 0.3s var(--ease);
 }
-.grid-card-preview video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.grid-card:hover .grid-card-media::after {
+  opacity: 1;
+  background: rgba(13, 12, 16, 0.6);
 }
 
 .grid-card-info {
@@ -262,6 +296,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  text-align: left;
 }
 .grid-card-info h3 {
   font-size: 1.15rem;
@@ -370,19 +405,19 @@
 /* ===== RESPONSIVE RING ADJUSTMENTS ===== */
 @media (max-width: 767px) {
   .ring-stage {
-    height: 260px;
+    height: 280px;
   }
   .ring-card {
-    width: 160px;
-    height: 100px;
-    margin-left: -80px;
-    margin-top: -50px;
+    width: 60px;
+    height: 108px;
+    margin-left: -30px;
+    margin-top: -54px;
   }
   .ring-card-meta {
-    padding: 10px;
+    padding: 4px;
   }
   .ring-card-meta h3 {
-    font-size: 0.8rem;
+    font-size: 0.5rem;
   }
   .badge-mini {
     font-size: 0.5rem;
