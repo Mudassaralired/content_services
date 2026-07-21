@@ -362,8 +362,10 @@ const lightboxDesc = document.getElementById('lightboxDesc');
 
 function openLightbox(v) {
   if (!lightbox || !lightboxVideo) return;
-  lightboxTitle.textContent = v.title;
-  lightboxDesc.textContent = v.desc;
+  
+  // Format premium HTML inside lightbox headers
+  lightboxTitle.innerHTML = `<span class="badge-mini" style="margin-bottom: 8px; display: inline-block;">${v.cat === 'motion' ? 'CGI & Motion' : v.cat === 'commercial' ? 'Commercial Film' : 'Social & UGC Ad'}</span><br>${v.title}`;
+  lightboxDesc.innerHTML = `${v.desc}<br><a href="mailto:banmance5@gmail.com?subject=Inquiry about ${encodeURIComponent(v.title)}" class="button" style="margin-top: 24px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; padding: 10px 20px; border-radius: 6px;" data-cursor>Start a Project Like This ↗</a>`;
   
   // Set video source (strict click-to-load)
   lightboxVideo.src = v.url;

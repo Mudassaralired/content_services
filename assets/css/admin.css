@@ -1,13 +1,14 @@
 :root {
-  --ink: #0d0c10;            /* Cinematic warm obsidian black */
-  --ink-2: #141318;          /* Rich charcoal-obsidian */
-  --ink-3: #1c1a21;          /* Warm graphite */
+  --ink: #0a090c;            /* Ultra-premium warm obsidian black */
+  --ink-2: #111015;          /* Rich charcoal-obsidian */
+  --ink-3: #18161d;          /* Warm graphite */
   --paper: #f6f5f8;          /* Soft warm off-white */
   --soft: #a09da8;           /* Elegant warm slate secondary text */
   --faint: #696675;          /* Dim helper text */
-  --line: #26242e;           /* Elegant slate-line borders */
-  --accent: #ff6e40;         /* Glowing Solar Amber / Sunset Coral */
-  --accent-deep: #e04a1f;    /* Deeper cinematic copper for hover and light bg contrast */
+  --line: rgba(255, 255, 255, 0.05); /* Elegant transparent slate-line borders */
+  --accent: #ff7e47;         /* Glowing Solar Amber / Sunset Orange */
+  --accent-deep: #e0531c;    /* Deeper cinematic copper for hover and light bg contrast */
+  --sand: #d4c5b9;           /* Luxury warm sand/champagne accent */
   --ok: #10b981;             /* Emerald green success */
   --err: #ef4444;            /* Red error */
   --ease: cubic-bezier(.16, 1, .3, 1);

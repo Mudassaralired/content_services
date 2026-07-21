@@ -21,18 +21,29 @@
   font-size: clamp(1rem, 1.5vw, 1.15rem);
 }
 
-/* 3D Ring stage */
+/* 3D Ring stage with ambient floor shadow */
 .ring-stage {
   position: relative;
   width: 100%;
-  height: 440px;
+  height: 460px;
   margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1400px;
+  perspective: 1600px; /* High-end depth perception */
   cursor: grab;
   user-select: none;
+}
+.ring-stage::after {
+  content: "";
+  position: absolute;
+  bottom: 25px;
+  width: 76%;
+  height: 16px;
+  background: radial-gradient(ellipse, rgba(255, 126, 71, 0.12), transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 1;
 }
 .ring-stage:active {
   cursor: grabbing;
@@ -93,9 +104,9 @@
 }
 
 .ring-card:hover .ring-card-inner {
-  transform: scale(1.08) translateZ(10px);
+  transform: scale(1.1) translateZ(20px);
   border-color: var(--accent);
-  box-shadow: 0 8px 32px rgba(255, 110, 64, 0.3);
+  box-shadow: 0 12px 36px rgba(255, 126, 71, 0.35);
 }
 
 .ring-card-thumb {
@@ -131,9 +142,9 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid rgba(255, 110, 64, 0.25);
-  background: rgba(255, 110, 64, 0.05);
+  color: var(--sand);
+  border: 1px solid rgba(212, 197, 185, 0.25);
+  background: rgba(212, 197, 185, 0.05);
   padding: 2px 8px;
   border-radius: 4px;
 }
@@ -331,14 +342,14 @@
   position: fixed;
   inset: 0;
   z-index: 500;
-  background: rgba(13, 12, 16, 0.98);
-  backdrop-filter: blur(12px);
+  background: rgba(10, 9, 12, 0.98);
+  backdrop-filter: blur(16px);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s var(--ease);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .lightbox-overlay.open {
   opacity: 1;
@@ -351,11 +362,13 @@
   flex-direction: column;
   gap: 20px;
   position: relative;
-  transform: translateY(20px);
-  transition: transform 0.4s var(--ease);
+  transform: scale(0.92) translateY(10px);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .lightbox-overlay.open .lightbox-content {
-  transform: translateY(0);
+  transform: scale(1) translateY(0);
+  opacity: 1;
 }
 
 .lightbox-close {
