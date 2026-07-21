@@ -427,3 +427,38 @@ const obs = new IntersectionObserver((entries) => {
 }, obsOptions);
 
 revealElements.forEach(el => obs.observe(el));
+
+// ===========================
+// MOBILE NAV TOGGLE & SCROLL
+// ===========================
+const headerEl = document.getElementById('header');
+const hambEl = document.getElementById('hamb');
+const navLinksEl = document.getElementById('navlinks');
+
+if (hambEl && navLinksEl) {
+  hambEl.onclick = () => {
+    const isOpen = navLinksEl.classList.toggle('open');
+    hambEl.setAttribute('aria-expanded', isOpen);
+    hambEl.textContent = isOpen ? '✕' : '☰';
+  };
+
+  // Close menu on link clicks
+  const links = navLinksEl.querySelectorAll('a');
+  links.forEach(link => {
+    link.onclick = () => {
+      navLinksEl.classList.remove('open');
+      hambEl.textContent = '☰';
+      hambEl.setAttribute('aria-expanded', 'false');
+    };
+  });
+}
+
+window.addEventListener('scroll', () => {
+  if (headerEl) {
+    if (window.scrollY > 40) {
+      headerEl.classList.add('scrolled');
+    } else {
+      headerEl.classList.remove('scrolled');
+    }
+  }
+});

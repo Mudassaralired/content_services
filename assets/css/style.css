@@ -1431,11 +1431,14 @@ dialog::backdrop {
     display: flex;
     position: fixed;
     inset: 78px 0 auto;
-    background: var(--ink-2);
-    padding: 28px 24px;
+    background: rgba(17, 16, 21, 0.96);
+    backdrop-filter: blur(16px);
+    padding: 32px 28px;
     flex-direction: column;
     align-items: flex-start;
+    gap: 24px;
     border-bottom: 1px solid var(--line);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   }
   .section-head { grid-template-columns: 1fr; }
   .project, .project.feature, .project.side { grid-column: span 12; aspect-ratio: 16/10; }
