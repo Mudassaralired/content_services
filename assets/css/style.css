@@ -1453,8 +1453,34 @@ dialog::backdrop {
 @media (max-width: 580px) {
   .wrap { width: min(var(--max), calc(100% - 32px)); }
   section { padding: 88px 0; }
-  .hero-copy { padding-bottom: 92px; }
-  .hero-note { left: 16px; right: auto; text-align: left; }
+  .hero {
+    min-height: auto;
+    height: auto;
+    padding-top: 110px;
+    padding-bottom: 40px;
+  }
+  .hero-copy {
+    padding: 0 0 10px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+  .hero-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-note {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    left: auto;
+    margin-top: 36px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
   .project, .project.feature, .project.side { aspect-ratio: 4/5; }
   .positioning-grid { gap: 44px; }
   .offer { grid-template-columns: 45px 1fr; }
