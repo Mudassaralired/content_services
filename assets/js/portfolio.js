@@ -97,7 +97,7 @@ function renderRing() {
       <div class="ring-card-inner">
         <img class="ring-card-thumb" src="${thumbUrl}" alt="${v.title}" loading="lazy">
         <div class="ring-card-meta">
-          <span class="badge-mini">${v.cat === 'motion' ? 'CGI' : v.cat === 'commercial' ? 'Comm' : 'UGC'}</span>
+          <span class="badge-mini">${v.cat === 'motion' ? '3D Motion' : v.cat === 'commercial' ? 'Commercial' : 'Creative'}</span>
           <h3>${v.title}</h3>
         </div>
       </div>
@@ -307,7 +307,7 @@ function appendCard(v) {
   card.innerHTML = `
     <div class="grid-card-media">
       <img src="${thumb}" alt="${v.title}" loading="lazy">
-      <span class="badge-mini absolute">${v.cat === 'motion' ? 'CGI' : v.cat === 'commercial' ? 'Comm' : 'UGC'}</span>
+      <span class="badge-mini absolute">${v.cat === 'motion' ? 'CGI & 3D Motion' : v.cat === 'commercial' ? 'AI Commercial & Spec' : 'Performance Social Creative'}</span>
     </div>
     <div class="grid-card-info">
       <h3>${v.title}</h3>
@@ -364,7 +364,7 @@ function openLightbox(v) {
   if (!lightbox || !lightboxVideo) return;
   
   // Format premium HTML inside lightbox headers
-  lightboxTitle.innerHTML = `<span class="badge-mini" style="margin-bottom: 8px; display: inline-block;">${v.cat === 'motion' ? 'CGI & Motion' : v.cat === 'commercial' ? 'Commercial Film' : 'Social & UGC Ad'}</span><br>${v.title}`;
+  lightboxTitle.innerHTML = `<span class="badge-mini" style="margin-bottom: 8px; display: inline-block;">${v.cat === 'motion' ? 'CGI & 3D Motion' : v.cat === 'commercial' ? 'AI Commercial Spec' : 'Performance Social Creative'}</span><br>${v.title}`;
   lightboxDesc.innerHTML = `${v.desc}<br><a href="mailto:banmance5@gmail.com?subject=Inquiry about ${encodeURIComponent(v.title)}" class="button" style="margin-top: 24px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; padding: 10px 20px; border-radius: 6px;" data-cursor>Start a Project Like This ↗</a>`;
   
   // Set video source (strict click-to-load)
