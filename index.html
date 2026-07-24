@@ -16,7 +16,7 @@
 <!-- Preconnect for performance -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://player.vimeo.com">
+<link rel="preconnect" href="https://res.cloudinary.com">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
@@ -94,8 +94,22 @@
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <div class="hero-poster"></div>
-  <div class="hero-media" id="heroMedia" data-src="https://player.vimeo.com/video/1209488036?background=1&autoplay=1&loop=1&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1"></div>
+  <div class="hero-video-wrapper">
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="https://res.cloudinary.com/dbjvyvjs6/video/upload/so_2,c_fill,w_1920,h_1080,q_auto,f_jpg/v1784881545/AUTOM_ym8ltz.jpg"
+      class="hero-video"
+    >
+      <source
+        src="https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784881545/AUTOM_ym8ltz.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
   <div class="wrap hero-copy">
     <span class="kicker">Independent AI Video &amp; Motion Director</span>
     <h1>Ideas, engineered to <span style="color:var(--accent)">move.</span></h1>
@@ -120,17 +134,17 @@
   </div>
 </section>
 
-<!-- TRUSTED BY LOGO GRID -->
-<section class="trusted-brands reveal">
+<!-- TRUST WORKFLOW BAR -->
+<section class="trust-section reveal">
   <div class="wrap">
-    <p class="trust-title">Collaborated with founders & brand leads at</p>
-    <div class="brand-grid">
-      <span class="brand-logo" data-cursor>AuraGlow</span>
-      <span class="brand-logo" data-cursor>Nomad Kit</span>
-      <span class="brand-logo" data-cursor>ByteFlow</span>
-      <span class="brand-logo" data-cursor>Velo Athletics</span>
-      <span class="brand-logo" data-cursor>Zenith Sleep</span>
-      <span class="brand-logo" data-cursor>Lumina Tech</span>
+    <div class="trust-bar">
+      <p class="trust-label">Trusted workflow</p>
+      <div class="trust-items">
+        <span>⚡ 48h First Cut</span>
+        <span>🎬 40+ Videos Delivered</span>
+        <span>🌍 Global Clients</span>
+        <span>🔒 100% Usage Rights</span>
+      </div>
     </div>
   </div>
 </section>
@@ -143,26 +157,25 @@
   </div>
 </div>
 
-<!-- WORK -->
+<!-- PORTFOLIO / GALLERY -->
 <section id="work">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyeline">Selected Portfolio</span><h2>Curated Works &amp; Creative Directions.</h2></div>
-      <p>A unified showcase of AI commercials, luxury product spots, CGI branding, and motion systems engineered for high conversion.</p>
+      <div><span class="eyeline">Selected Portfolio</span><h2>Selected Work</h2></div>
+      <p>AI commercials, product films &amp; motion systems — built for conversion.</p>
     </div>
     <div class="work-toolbar reveal">
-      <div class="filters">
-        <button class="filter active" data-filter="all" data-cursor>All Works</button>
-        <button class="filter" data-filter="ugc" data-cursor>Social Creative</button>
-        <button class="filter" data-filter="product" data-cursor>Product Spec</button>
-        <button class="filter" data-filter="motion" data-cursor>CGI &amp; 3D Motion</button>
+      <div class="filter-tabs">
+        <button class="filter active" data-filter="all" data-cursor>All Work</button>
+        <button class="filter" data-filter="commercial" data-cursor>AI Commercials</button>
+        <button class="filter" data-filter="product" data-cursor>Product Films</button>
+        <button class="filter" data-filter="cgi" data-cursor>CGI &amp; 3D</button>
+        <button class="filter" data-filter="ugc" data-cursor>UGC / Social</button>
       </div>
-      <span class="work-count" id="count">06 featured / 08 total</span>
     </div>
-    <div class="projects" id="projects"></div>
-    <div class="more-wrap" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:40px">
-      <button class="button secondary" id="more" data-cursor>View all 8 projects</button>
-      <a href="portfolio.html" class="button" data-cursor>Explore Interactive 3D Gallery (40+ Videos) ↗</a>
+    <div class="portfolio-grid" id="projects"></div>
+    <div class="more-wrap" style="display:flex;justify-content:center;margin-top:40px">
+      <a href="#contact" class="button secondary" data-cursor>Start Your Project →</a>
     </div>
   </div>
 </section>
@@ -229,27 +242,43 @@
     <div class="section-head reveal">
       <div>
         <span class="eyeline">Client words</span>
-        <h2>Trusted by <span style="color:var(--accent)">brands that ship.</span></h2>
+        <h2>What clients <span style="color:var(--accent)">say.</span></h2>
       </div>
       <p>Notes from founders, creative directors and marketing leads I have partnered with globally.</p>
     </div>
-  </div>
-  <!-- 3-row infinite marquee slider -->
-  <div class="tst-slider-container" aria-label="Client testimonials carousel">
-    <!-- Row 1: Left scroll -->
-    <div class="tst-row tst-row-left reveal-left" id="tstRow1">
-      <div class="tst-track" id="tstTrack1"></div>
-      <div class="tst-track" id="tstTrack1B" aria-hidden="true"></div>
-    </div>
-    <!-- Row 2: Right scroll -->
-    <div class="tst-row tst-row-right reveal-right" id="tstRow2">
-      <div class="tst-track" id="tstTrack2"></div>
-      <div class="tst-track" id="tstTrack2B" aria-hidden="true"></div>
-    </div>
-    <!-- Row 3: Left scroll (slower) -->
-    <div class="tst-row tst-row-mid reveal-left" id="tstRow3">
-      <div class="tst-track" id="tstTrack3"></div>
-      <div class="tst-track" id="tstTrack3B" aria-hidden="true"></div>
+    <div class="testimonial-grid reveal">
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p>"Three UGC variations in 48 hours, and our CTR jumped 340%. The AI workflow is genuinely next-level."</p>
+        <div class="t-author">
+          <strong>Performance Creative</strong>
+          <span>DTC Brand — Paid Social</span>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p>"Finally someone who gets that AI video is about the idea, not the tech. The product film lifted our conversion by 28%."</p>
+        <div class="t-author">
+          <strong>Product Storytelling</strong>
+          <span>E-commerce — Launch Campaign</span>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p>"The 3D motion system he built for our SaaS dashboard became our entire brand identity. Clean, fast, perfectly on-brief."</p>
+        <div class="t-author">
+          <strong>Motion Systems</strong>
+          <span>SaaS Startup — Brand Identity</span>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p>"Hook CTR went from 1.8% to 6.2% on our main product line. Incredible execution and creative insights throughout."</p>
+        <div class="t-author">
+          <strong>Performance Creative</strong>
+          <span>DTC Brand — Meta Ads</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -344,14 +373,12 @@
       <div class="footer-links">
         <a href="#work" data-cursor>Work</a>
         <a href="#services" data-cursor>Services</a>
-        <a href="#process" data-cursor>Process</a>
-        <a href="#testimonials" data-cursor>Reviews</a>
         <a href="#contact" data-cursor>Contact</a>
         <a href="admin.html" data-cursor style="opacity: 0.5; font-size: 0.8rem; margin-left: 10px; border-left: 1px solid var(--line); padding-left: 14px;">Dashboard</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Mudassar Ali. Independent practice, available worldwide.</span>
+      <span>© 2026 Mudassar Ali. All rights reserved.</span>
       <div class="footer-socials">
         <a href="https://vimeo.com/" target="_blank" rel="noopener" aria-label="Vimeo Portfolio" data-cursor>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="soc-icon"><path d="M22.3 8.3c-.1 2-1.5 4.8-4.1 8.4-2.7 3.7-5 5.5-7 5.5-1.2 0-2.2-1.1-3-3.3-.5-1.9-1.1-3.9-1.7-5.9-.6-2.2-1.3-3.3-2-3.3-.2 0-.8.4-1.8 1.2L1.5 9.4c1.2-1 2.4-2.1 3.7-3.2 1.8-1.5 3.1-2.3 4-2.3 2.1 0 3.2 1.4 3.4 4.3.2 2.4.7 4.9 1.4 7.4.5 1.7.9 2.6 1.4 2.6.4 0 1-.9 1.9-2.7.9-1.7.9-2.9.1-3.6-.8-.7-2.3-.5-2.3-.5 1-.9 2.5-2.2 4.4-2.4 1.8-.2 2.7 1 2.8 3.5z"/></svg>
@@ -373,7 +400,7 @@
   <article class="case">
     <div class="case-video">
       <button class="case-close" id="caseClose" aria-label="Close project">×</button>
-      <iframe id="caseFrame" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Project film"></iframe>
+      <video id="caseVideo" controls autoplay playsinline style="width:100%;height:100%;object-fit:cover;border-radius:12px 12px 0 0"></video>
     </div>
     <div class="case-copy">
       <div>
@@ -382,9 +409,8 @@
         <p id="caseDesc"></p>
       </div>
       <div class="case-specs">
-        <div><b>Project type</b><span>Independent concept / spec film</span></div>
-        <div><b>Creative role</b><span id="caseRole"></span></div>
-        <div><b>Tools</b><span id="caseTools"></span></div>
+        <div><b>Category</b><span id="caseRole"></span></div>
+        <div><b>Deliverables</b><span id="caseTools"></span></div>
       </div>
     </div>
   </article>

@@ -259,37 +259,29 @@ nav {
   align-items: end;
   overflow: hidden;
 }
-.hero-media, .hero-media iframe {
+.hero-video-wrapper {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  border: 0;
+  overflow: hidden;
+  z-index: 0;
 }
-.hero-media iframe {
-  width: 177.78vh;
-  min-width: 100%;
-  height: 56.25vw;
-  min-height: 100%;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-.hero-poster {
+.hero-video-wrapper::after {
+  content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 70% 30%, var(--accent-deep), transparent 55%), var(--ink);
-  transition: opacity .8s var(--ease);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(10, 9, 12, 0.85) 100%
+  );
+  z-index: 1;
 }
-.hero.playing .hero-poster {
-  opacity: 0;
-}
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(13, 12, 16, 0.96), rgba(13, 12, 16, 0.55) 55%, rgba(13, 12, 16, 0.22)), linear-gradient(0deg, rgba(13, 12, 16, 0.88), transparent 58%);
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .hero-copy {
   position: relative;
@@ -396,41 +388,41 @@ h1 {
   50% { opacity: .5; transform: scale(1.4); }
 }
 
-/* ===== TRUSTED BRANDS LOGO GRID ===== */
-.trusted-brands {
-  padding-block: 56px;
-  border-top: 1px solid var(--line);
-  background: var(--ink);
+/* ===== TRUST WORKFLOW BAR ===== */
+.trust-section {
+  padding: 28px 0;
+  border-block: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.01);
 }
-.trust-title {
-  text-align: center;
-  font-size: 0.7rem;
+.trust-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.trust-label {
+  font-size: 0.76rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--faint);
-  margin-bottom: 32px;
-}
-.brand-grid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: clamp(32px, 6vw, 64px);
-}
-.brand-logo {
-  font-family: "Syne", sans-serif;
-  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
-  font-weight: 800;
+  letter-spacing: 0.14em;
   color: var(--soft);
-  opacity: 0.45;
-  transition: opacity 0.3s var(--ease), color 0.3s var(--ease), transform 0.3s var(--ease);
-  letter-spacing: -0.02em;
 }
-.brand-logo:hover {
-  opacity: 0.9;
-  color: var(--accent);
-  transform: translateY(-1px);
+.trust-items {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.trust-items span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px 18px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
 }
 
 /* ===== TICKER ===== */
@@ -444,7 +436,7 @@ h1 {
   width: max-content;
   display: flex;
   gap: 40px;
-  animation: ticker 30s linear infinite;
+  animation: ticker 20s linear infinite;
 }
 .ticker span {
   display: flex;
@@ -527,35 +519,84 @@ section {
   font-size: .8rem;
   font-variant-numeric: tabular-nums;
 }
-.projects {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 18px;
+.filter-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
-.project {
-  grid-column: span 6;
-  position: relative;
-  aspect-ratio: 16/10;
-  overflow: hidden;
-  border-radius: 14px;
-  background: var(--ink-3);
-  border: 1px solid var(--line);
+.filter-tabs .filter {
+  min-height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--soft);
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  isolation: isolate;
+  transition: all 0.25s var(--ease);
 }
-.project.feature {
-  grid-column: span 8;
-  aspect-ratio: 16/11;
+.filter-tabs .filter:hover, .filter-tabs .filter.active {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
 }
-.project.side {
-  grid-column: span 4;
-  aspect-ratio: 4/5;
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
 }
-.project.archive {
-  display: none;
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
-.project.show {
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  overflow: hidden;
+}
+.card-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
+}
+.card-info {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.card-info h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--paper);
+  margin-top: 2px;
+}
+.card-info p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--soft);
+}
 }
 .poster, .preview {
   position: absolute;
@@ -829,53 +870,54 @@ section {
   overflow: hidden;
   padding-bottom: 80px;
 }
-.tst-slider-container {
-  overflow: hidden;
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+.t-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  padding: 20px 0;
-  user-select: none;
+  gap: 18px;
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
 }
-.tst-slider-container::before, .tst-slider-container::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 12%;
-  z-index: 5;
-  pointer-events: none;
+.t-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.2);
 }
-.tst-slider-container::before {
-  left: 0;
-  background: linear-gradient(90deg, var(--ink-2), transparent);
+.t-stars {
+  color: #ffb703;
+  font-size: 1.15rem;
+  letter-spacing: 3px;
 }
-.tst-slider-container::after {
-  right: 0;
-  background: linear-gradient(-90deg, var(--ink-2), transparent);
+.t-card p {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: #ccc;
+  font-style: italic;
 }
-.tst-row {
+.t-author {
   display: flex;
-  width: max-content;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
-.tst-track {
-  display: flex;
-  gap: 24px;
-  padding-right: 24px;
+.t-author strong {
+  color: var(--paper);
+  font-size: 0.95rem;
+  font-weight: 700;
 }
-.tst-row-left .tst-track { animation: tstLeft 60s linear infinite; }
-.tst-row-right .tst-track { animation: tstRight 60s linear infinite; }
-.tst-row-mid .tst-track { animation: tstLeft 75s linear infinite; }
-.tst-row:hover .tst-track { animation-play-state: paused; }
-@keyframes tstLeft {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+.t-author span {
+  color: var(--soft);
+  font-size: 0.82rem;
 }
 @keyframes tstRight {
   0% { transform: translateX(-50%); }
@@ -1441,12 +1483,11 @@ dialog::backdrop {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   }
   .section-head { grid-template-columns: 1fr; }
-  .project, .project.feature, .project.side { grid-column: span 12; aspect-ratio: 16/10; }
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .testimonial-grid { grid-template-columns: 1fr; }
   .positioning-grid { grid-template-columns: 1fr; gap: 64px; }
   .positioning h2 { position: static; }
-  .quote { width: 310px; padding: 20px; }
   .reach { grid-template-columns: 1fr; }
-  .tapcue { display: block; }
   .case-copy { grid-template-columns: 1fr; }
   .row { grid-template-columns: 1fr; }
 }
