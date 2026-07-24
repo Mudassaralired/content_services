@@ -33,81 +33,70 @@ tryInitSupabase();
 
 // ===========================
 // ===========================
-// CURATED PORTFOLIO DATA (6 Items)
+// COMPLETE VIDEO CATALOG (40+ Projects)
 // ===========================
 const data = [
-  {
-    id: 'autom',
-    title: 'AUTOM',
-    cat: 'cgi',
-    tag: 'CGI & 3D',
-    role: 'Automotive CGI',
-    tools: 'Full vehicle reveal, dynamic lighting',
-    desc: 'Automotive CGI — Full vehicle reveal with dynamic lighting',
-    url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784881545/AUTOM_ym8ltz.mp4'
-  },
-  {
-    id: 'perfume',
-    title: 'PERFUME',
-    cat: 'commercial',
-    tag: 'AI Commercial',
-    role: 'AI Commercial',
-    tools: 'Macro detail, cinematic grade',
-    desc: 'Luxury fragrance film — Macro detail + cinematic grade',
-    url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532508/perfume_ad_d5urml.mp4'
-  },
-  {
-    id: 'sonix',
-    title: 'SONIX',
-    cat: 'ugc',
-    tag: 'UGC / Social',
-    role: 'UGC / Social',
-    tools: 'Hook-first 9:16 format, paid social',
-    desc: 'UGC social ad — Hook-first 9:16 format for paid social',
-    url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784531745/SONIX_vwu5qm.mp4'
-  },
-  {
-    id: 'realestate',
-    title: 'REAL ESTATE',
-    cat: 'cgi',
-    tag: 'CGI & 3D',
-    role: 'CGI & 3D Walkthrough',
-    tools: 'Architectural render, luxury reveal',
-    desc: 'Architectural CGI walkthrough — Luxury property reveal',
-    url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784531684/raw1111_snia7k.mp4'
-  },
-  {
-    id: 'beverage',
-    title: 'BEVERAGE',
-    cat: 'product',
-    tag: 'Product Film',
-    role: 'Product Spec Film',
-    tools: 'Liquid simulation, macro detail',
-    desc: 'Product spec film — Liquid simulation + macro detail',
-    url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532504/sprite_ad_fsjxlj.mp4'
-  },
-  {
-    id: 'saas',
-    title: 'SAAS',
-    cat: 'product',
-    tag: 'Product Film',
-    role: 'SaaS Interface Animation',
-    tools: 'UI motion, dashboard showcase',
-    desc: 'SaaS interface animation — Dashboard feature showcase',
-    url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784533025/hr_add_mpsskk.mp4'
-  }
+  // TOP FEATURED PROJECTS (Displayed First at Top)
+  { id: 'autom', title: 'AUTOM Automotive CGI', cat: 'cgi', tag: 'CGI & 3D', role: 'Automotive CGI', tools: 'Full vehicle reveal, dynamic lighting', desc: 'Automotive CGI — Full vehicle reveal with dynamic lighting', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784881545/AUTOM_ym8ltz.mp4', featured: true },
+  { id: 'perfume', title: 'Oura Fragrance Commercial', cat: 'commercial', tag: 'AI Commercial', role: 'AI Commercial', tools: 'Macro detail, cinematic grade', desc: 'Luxury fragrance film — Macro detail + cinematic grade', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532508/perfume_ad_d5urml.mp4', featured: true },
+  { id: 'sonix', title: 'Sonix Smartwatch Reveal', cat: 'ugc', tag: 'UGC / Social', role: 'UGC / Social', tools: 'Hook-first 9:16 format, paid social', desc: 'UGC social ad — Hook-first 9:16 format for paid social', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784531745/SONIX_vwu5qm.mp4', featured: true },
+  { id: 'realestate', title: 'Architectural Real Estate CGI', cat: 'cgi', tag: 'CGI & 3D', role: 'CGI & 3D Walkthrough', tools: 'Architectural render, luxury reveal', desc: 'Architectural CGI walkthrough — Luxury property reveal', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784531684/raw1111_snia7k.mp4', featured: true },
+  { id: 'beverage', title: 'Sprite Beverage Spec', cat: 'product', tag: 'Product Film', role: 'Product Spec Film', tools: 'Liquid simulation, macro detail', desc: 'Product spec film — Liquid simulation + macro detail', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532504/sprite_ad_fsjxlj.mp4', featured: true },
+  { id: 'saas', title: 'HR SaaS Dashboard Visual', cat: 'product', tag: 'Product Film', role: 'SaaS Interface Animation', tools: 'UI motion, dashboard showcase', desc: 'SaaS interface animation — Dashboard feature showcase', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784533025/hr_add_mpsskk.mp4', featured: true },
+
+  // COMPLETE CATALOG PROJECTS (Remaining Portfolio Items)
+  { id: '1', title: 'Automotive Spec Film', cat: 'cgi', tag: 'CGI & 3D', role: 'Concept, direction', tools: 'AI generation, After Effects', desc: 'A cinematic automotive concept built around dark moody lighting and precision metallic curves.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532520/car_seat_ad_crqofg.mp4' },
+  { id: '4', title: 'Ond Onde Fragrance', cat: 'commercial', tag: 'AI Commercial', role: 'Luxury fragrance ad', tools: 'Micro-particles, smoke FX', desc: 'Luxury fragrance ad focusing on micro-particles, smoke effects, and premium gold-black assets.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784531651/ond_onde_pf_ad_lpn5ub.mp4' },
+  { id: '5', title: 'Aura Glow Spec', cat: 'cgi', tag: 'CGI & 3D', role: 'Studio lighting exploration', tools: 'Macro cosmetics texture', desc: 'High-contrast studio lighting exploration with macro cosmetics texture and glowing embers.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784531826/afe_vuephf.mp4' },
+  { id: '6', title: 'Buly Skincare Kid', cat: 'commercial', tag: 'AI Commercial', role: 'Soft-toned commercial', tools: 'AI art direction', desc: 'Soft-toned commercial balancing clean aesthetics with products for delicate skin.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784531854/buly_child_vid_dgn3on.mp4' },
+  { id: '7', title: 'ByteFlow Hosting', cat: 'ugc', tag: 'UGC / Social', role: 'UGC social ad', tools: 'AI voice, subtitles', desc: 'Dynamic, text-captioned UGC social ad highlighting modern SaaS hosting speed.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784531991/hosting_ad_tw5wah.mp4' },
+  { id: '8', title: 'Mushroom Gummies Ad', cat: 'ugc', tag: 'UGC / Social', role: 'High-energy social ad', tools: 'Fast cuts, overlay hooks', desc: 'Fun, high-energy UGC ad with fast cuts, overlays, and direct hook messaging.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532024/mashroom_gummis_ad_svnawu.mp4' },
+  { id: '9', title: 'RedBull Energy Ad', cat: 'commercial', tag: 'AI Commercial', role: 'Commercial spot', tools: 'Motion graphics, liquid FX', desc: 'Fast-paced commercial ad blending dynamic motion graphics with beverage CGI.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532058/redbull_ad3_yhfpe6.mp4' },
+  { id: '10', title: 'Pure Shilajit Ad', cat: 'ugc', tag: 'UGC / Social', role: 'Wellness UGC ad', tools: 'Captions, product placement', desc: 'Wellness UGC social ad showcasing product application and clean text formatting.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532090/shilajit_ad_ekglrd.mp4' },
+  { id: '11', title: 'Shilajit Promo', cat: 'commercial', tag: 'AI Commercial', role: 'Commercial promo', tools: 'Amber lighting, particle FX', desc: 'Dark, premium commercial highlighting raw texture, amber lighting, and product benefits.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532095/shilajit_promo_m4a04r.mp4' },
+  { id: '12', title: 'Teacupu Matcha Ad', cat: 'ugc', tag: 'UGC / Social', role: 'Organic social ad', tools: 'Voiceover, pacing', desc: 'Organic green-themed UGC social campaign focusing on visual taste and pacing.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532144/teacupu_ad_w7edtu.mp4' },
+  { id: '13', title: 'CGI Visual Loop', cat: 'cgi', tag: 'CGI & 3D', role: 'CGI simulation', tools: 'Refraction, morphing 3D', desc: 'Looping CGI simulation exploring light reflections and dynamic morphing spheres.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532151/0606_ymwwmb.mp4' },
+  { id: '14', title: 'Black Friday Promo', cat: 'commercial', tag: 'AI Commercial', role: 'Kinetic promo', tools: 'Typography, orange grade', desc: 'High-contrast commercial promo with bold orange styling and kinetic typography.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532173/black_friday_ad_rx149h.mp4' },
+  { id: '15', title: 'Baby Skincare Ad', cat: 'ugc', tag: 'UGC / Social', role: 'Skincare UGC', tools: 'Soft lighting, macro detail', desc: 'Soft-lit UGC social ad highlighting organic components and soothing application.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532218/baby_product_ad_lcy64n.mp4' },
+  { id: '16', title: 'Avatar Visual Concept', cat: 'cgi', tag: 'CGI & 3D', role: '3D character render', tools: 'Subsurface scattering, cosmic atmosphere', desc: '3D character render studying skin lighting and ambient cosmic atmosphere.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532227/avatar_vid_mxednh.mp4' },
+  { id: '17', title: 'Redmi Buds Ad', cat: 'commercial', tag: 'AI Commercial', role: 'Tech commercial', tools: 'Product explosion, sound design', desc: 'Modern tech commercial showcasing audio performance, fit, and noise-cancelling tech.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532289/in_redmib_ecxq2i.mp4' },
+  { id: '18', title: 'Magnesium Drops Ad', cat: 'ugc', tag: 'UGC / Social', role: 'Supplement social ad', tools: 'AI presenter, captions', desc: 'Direct-to-camera UGC social ad discussing supplement benefits and active lifestyle.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532317/magnesio_ad_mzhwzw.mp4' },
+  { id: '19', title: 'TikTok Shop Ad', cat: 'ugc', tag: 'UGC / Social', role: 'E-commerce social ad', tools: 'Interactive overlays, subtitles', desc: 'Highly interactive social-first UGC ad with visual tags, subtitles, and price overlays.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532373/toktok_shop_ad_nur1a2.mp4' },
+  { id: '20', title: 'Freebies Promo', cat: 'commercial', tag: 'AI Commercial', role: 'Lifestyle commercial', tools: 'Bundle showcase, bright color', desc: 'Bright, lifestyle commercial film focused on product bundles and rewards.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532440/frebies_with_product_ad_xh6itc.mp4' },
+  { id: '23', title: 'Face Wash Social Ad', cat: 'ugc', tag: 'UGC / Social', role: 'Foam texture ad', tools: 'Water splash FX, macro detail', desc: 'Skincare social ad showcasing texture foam, water splash, and usage instructions.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532513/wash_product_ad_qljycf.mp4' },
+  { id: '24', title: 'Hulk Concept Ad', cat: 'cgi', tag: 'CGI & 3D', role: 'Dark CGI concept', tools: 'Particle physics, heavy impact', desc: 'Dark CGI motion concept exploring weight, impact, and particle physics.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532524/paliment_vid_hulk_sgvhwn.mp4' },
+  { id: '25', title: 'Visa Card Ad', cat: 'commercial', tag: 'AI Commercial', role: 'Fintech commercial', tools: 'Sliding UI, minimal style', desc: 'Sleek, minimalist payment-card commercial with sliding transitions and UI graphics.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532531/visa_cnsl_ad_mfmjke.mp4' },
+  { id: '26', title: 'Hemoo Him Ad', cat: 'ugc', tag: 'UGC / Social', role: 'Grooming UGC ad', tools: 'Fast hook, text overlay', desc: 'Grooming UGC ad designed to capture attention in the first 3 seconds of scrolling.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532534/hemoo_him_ad_qptkya.mp4' },
+  { id: '27', title: 'Smoothie Green Ad', cat: 'commercial', tag: 'AI Commercial', role: 'Health commercial', tools: 'Fresh ingredient FX', desc: 'Clean, light commercial focused on fresh ingredients and healthy energy.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532557/smothi_green_ad_h5wma3.mp4' },
+  { id: '28', title: 'Ethnic Kitchen Ad', cat: 'ugc', tag: 'UGC / Social', role: 'Food social ad', tools: 'Recipe shots, voiceover', desc: 'Food UGC ad showcasing recipe preparation, close macro shots, and voiceover.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532560/ethnikichen_pv65pm.mp4' },
+  { id: '29', title: 'Air Filter CGI', cat: 'cgi', tag: 'CGI & 3D', role: '3D filter animation', tools: 'Particle flow, glass breakdown', desc: '3D CGI film showing air particles passing through multi-stage filter systems.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532595/air_filer_add_majrpn.mp4' },
+  { id: '30', title: 'Dressing Room Promo', cat: 'commercial', tag: 'AI Commercial', role: 'Fashion promo', tools: 'Lighting overlays, fabric movement', desc: 'High-contrast fashion commercial showcasing lighting overlays and fabric movements.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532607/dressing_add_td7ndl.mp4' },
+  { id: '31', title: 'Churaili Ad', cat: 'ugc', tag: 'UGC / Social', role: 'Social media ad', tools: 'Visual overlays, captions', desc: 'Churaili concept social ad with visual overlays and dynamic subtitle templates.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532611/churaili_ad_izpqty.mp4' },
+  { id: '32', title: 'Fat Loss System', cat: 'ugc', tag: 'UGC / Social', role: 'Fitness UGC ad', tools: 'Before/after overlay', desc: 'Before/after lifestyle UGC detailing fitness progress and nutrition guides.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784532704/fat_lose_add_dl9ahb.mp4' },
+  { id: '36', title: 'Luxury Jewelry CGI', cat: 'cgi', tag: 'CGI & 3D', role: 'Jewelry spec film', tools: 'Liquid metal, diamond refraction', desc: 'Exquisite jewelry spec film, demonstrating liquid metals and shining diamond refractions.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784533279/jeulary_add_cgtj3d.mp4' },
+  { id: '37', title: 'Smart Kitchen CGI', cat: 'cgi', tag: 'CGI & 3D', role: 'Architectural CGI', tools: 'Lighting design, interior render', desc: 'Architectural CGI showing automated kitchen setups and modern lighting designs.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784533353/kitchen_add_btixan.mp4' },
+  { id: '38', title: 'Peptoid Bottle Ad', cat: 'product', tag: 'Product Film', role: 'Bottle visualizer', tools: 'Studio lighting, 3D label', desc: '3D product visualization showcasing label graphics, material textures, and studio lighting.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784534534/peptoid_add_s1y3ov.mp4' },
+  { id: '39', title: 'Speaker CGI Reveal', cat: 'cgi', tag: 'CGI & 3D', role: 'Audio spec film', tools: 'Soundwave simulation, mesh explosion', desc: 'Premium audio speaker launch animation featuring expanding sound waves and meshes.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784534738/speeker_add_p7e6ct.mp4' },
+  { id: '40', title: 'Book Title Concept', cat: 'commercial', tag: 'AI Commercial', role: 'Book trailer', tools: 'Leather texture, gold foil', desc: 'Cinematic book release trailer, detailing leather binding textures and gold foil lettering.', url: 'https://res.cloudinary.com/dbjvyvjs6/video/upload/v1784534838/book_title_ikyp4q.mp4' }
 ];
 
 // ===========================
 // RENDER PORTFOLIO GRID
 // ===========================
 const projectsEl = document.getElementById('projects');
+let isExpanded = false;
 
-if (projectsEl) {
+function renderGallery(filter = 'all') {
+  if (!projectsEl) return;
   projectsEl.innerHTML = '';
-  data.forEach(p => {
+
+  data.forEach((p, idx) => {
+    const isFeatured = !!p.featured;
+    const isVisible = filter === 'all' ? (isExpanded || isFeatured) : (p.cat === filter);
+
     const card = document.createElement('div');
-    card.className = 'card reveal';
+    card.className = `card reveal ${!isVisible ? 'hidden-card' : ''}`;
+    card.style.display = isVisible ? 'flex' : 'none';
     card.dataset.category = p.cat;
     card.tabIndex = 0;
     card.setAttribute('data-cursor', '');
@@ -153,53 +142,29 @@ if (projectsEl) {
   });
 }
 
-// ===========================
-// CASE STUDY DIALOG (LIGHTBOX)
-// ===========================
-const caseDialog = document.getElementById('caseDialog');
-const caseVideo  = document.getElementById('caseVideo');
-
-function openCase(p) {
-  if (!caseDialog) return;
-  document.getElementById('caseLabel').textContent = p.tag;
-  document.getElementById('caseTitle').textContent = p.title;
-  document.getElementById('caseDesc').textContent  = p.desc;
-  document.getElementById('caseRole').textContent  = p.role;
-  document.getElementById('caseTools').textContent = p.tools;
-  if (caseVideo) {
-    caseVideo.src = p.url;
-    caseVideo.play().catch(() => {});
-  }
-  caseDialog.showModal();
+if (projectsEl) {
+  renderGallery();
 }
 
-function closeCase() {
-  if (caseDialog) caseDialog.close();
-  if (caseVideo) {
-    caseVideo.pause();
-    caseVideo.src = '';
-  }
+// Toggle All 40+ Projects Button Handler
+const toggleBtn = document.getElementById('toggleAllProjects');
+if (toggleBtn) {
+  toggleBtn.onclick = () => {
+    isExpanded = !isExpanded;
+    toggleBtn.textContent = isExpanded ? 'Show Featured 6 ↑' : 'Show All 40+ Projects ↓';
+    const activeFilter = document.querySelector('.filter.active')?.dataset.filter || 'all';
+    renderGallery(activeFilter);
+  };
 }
 
-const caseCloseBtn = document.getElementById('caseClose');
-if (caseCloseBtn) caseCloseBtn.onclick = closeCase;
-if (caseDialog) {
-  caseDialog.addEventListener('click', e => { if (e.target === caseDialog) closeCase(); });
-  caseDialog.addEventListener('close', () => { if (caseVideo) { caseVideo.pause(); caseVideo.src = ''; } });
-}
-
-// ===========================
-// WORK FILTERS
-// ===========================
+// Filter Tabs Handler
 document.querySelectorAll('.filter').forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
     btn.classList.add('active');
     const f = btn.dataset.filter;
-    document.querySelectorAll('.card').forEach(card => {
-      const match = f === 'all' || card.dataset.category === f;
-      card.style.display = match ? 'flex' : 'none';
-    });
+    if (f !== 'all') isExpanded = true;
+    renderGallery(f);
   };
 });
 
