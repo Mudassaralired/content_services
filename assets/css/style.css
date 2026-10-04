@@ -571,13 +571,13 @@ section {
 .card-media .card-video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 .card-media .card-poster {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 .card-media .play-btn {
