@@ -567,11 +567,50 @@ section {
   background: #000;
   overflow: hidden;
 }
-.card-media video {
+.card-media video,
+.card-media .card-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+.card-media .card-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.card-media .play-btn {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  transition: transform 0.25s var(--ease), background 0.25s var(--ease);
+}
+.card-media .play-btn svg {
+  width: 30px;
+  height: 30px;
+  margin-left: 3px;
+}
+.card:hover .play-btn {
+  transform: scale(1.1);
+  background: var(--accent, #ff4d00);
+}
+.card-media.has-video .card-poster,
+.card-media.has-video .play-btn {
+  display: none;
+}
+.card-media.has-video.is-playing .card-video {
+  cursor: pointer;
 }
 .card-info {
   padding: 20px 24px;
