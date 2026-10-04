@@ -268,6 +268,27 @@ function handleWhatsAppBrief(e) {
 window.handleWhatsAppBrief = handleWhatsAppBrief;
 
 // ===========================
+// FAQ ACCORDION
+// ===========================
+document.addEventListener('click', e => {
+  const q = e.target.closest('.faq-q');
+  if (!q) return;
+  const item = q.closest('.faq-item');
+  const answer = item.querySelector('.faq-a');
+  const isOpen = item.classList.contains('open');
+  // close all others
+  document.querySelectorAll('.faq-item.open').forEach(o => {
+    o.classList.remove('open');
+    o.querySelector('.faq-a').style.maxHeight = null;
+  });
+  // toggle current
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+});
+
+// ===========================
 // SMOOTH CURSOR (fine pointers only)
 // ===========================
 const finePointer = window.matchMedia('(pointer:fine)').matches;
