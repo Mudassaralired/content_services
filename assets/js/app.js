@@ -98,10 +98,18 @@ const data = [
 
 // ===========================
 // RENDER PORTFOLIO GRID
+// Click-to-play cards. No autoplay anywhere: posters load first
+// (fast), video element is created only when the user clicks.
 // ===========================
 const projectsEl = document.getElementById('projects');
+function pauseAllCards(except) {
+  document.querySelectorAll('#projects video').forEach(v => {
+    if (v !== except) v.pause();
+  });
+}
 function renderGallery(filter = 'all') {
   if (!projectsEl) return;
+  pauseAllCards(null);
   projectsEl.innerHTML = '';
 
   data.forEach(p => {
@@ -114,16 +122,16 @@ function renderGallery(filter = 'all') {
     card.className = 'card in';
     card.dataset.category = p.cat;
     card.tabIndex = 0;
-    card.setAttribute('data-cursor', '');
-    card.setAttribute('aria-label', `Watch ${p.title}`);
+    card.setAttribute('aria-label', `Play ${p.title}`);
 
     const posterUrl = p.url.replace(/\.mp4$/, '.jpg').replace('/video/upload/', '/video/upload/so_2,c_fill,w_640,h_360,q_auto,f_jpg/');
 
     card.innerHTML = `
       <div class="card-media">
-        <video muted loop playsinline preload="metadata" poster="${posterUrl}">
-          <source src="${p.url}" type="video/mp4" />
-        </video>
+        <img class="card-poster" src="${posterUrl}" alt="${p.title}" loading="lazy" width="640" height="360">
+        <button class="play-btn" aria-label="Play ${p.title}" tabindex="-1">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+        </button>
       </div>
       <div class="card-info">
         <span class="tag">${p.tag}</span>
@@ -132,24 +140,39 @@ function renderGallery(filter = 'all') {
       </div>
     `;
 
-    const videoEl = card.querySelector('video');
+    const mediaBox = card.querySelector('.card-media');
+    let videoEl = null;
 
-    card.addEventListener('mouseenter', () => {
-      if (videoEl) videoEl.play().catch(() => {});
-    });
-
-    card.addEventListener('mouseleave', () => {
-      if (videoEl) {
-        videoEl.pause();
-        videoEl.currentTime = 0;
+    function togglePlay() {
+      if (!videoEl) {
+        videoEl = document.createElement('video');
+        videoEl.setAttribute('playsinline', '');
+        videoEl.setAttribute('preload', 'metadata');
+        videoEl.controls = true;
+        videoEl.poster = posterUrl;
+        videoEl.className = 'card-video';
+        const src = document.createElement('source');
+        src.src = p.url;
+        src.type = 'video/mp4';
+        videoEl.appendChild(src);
+        mediaBox.insertBefore(videoEl, mediaBox.firstChild);
+        mediaBox.classList.add('has-video');
+        videoEl.addEventListener('pause', () => mediaBox.classList.remove('is-playing'));
+        videoEl.addEventListener('play', () => mediaBox.classList.add('is-playing'));
       }
-    });
+      if (videoEl.paused) {
+        pauseAllCards(videoEl);
+        videoEl.play().catch(() => {});
+      } else {
+        videoEl.pause();
+      }
+    }
 
-    card.addEventListener('click', () => openCase(p));
+    mediaBox.addEventListener('click', togglePlay);
     card.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        openCase(p);
+        togglePlay();
       }
     });
 
@@ -245,9 +268,10 @@ function handleWhatsAppBrief(e) {
 window.handleWhatsAppBrief = handleWhatsAppBrief;
 
 // ===========================
-// SMOOTH CURSOR
+// SMOOTH CURSOR (fine pointers only)
 // ===========================
-if (!isTouch) {
+const finePointer = window.matchMedia('(pointer:fine)').matches;
+if (finePointer) {
   const cur = document.getElementById('cursor');
   let cx = innerWidth/2, cy = innerHeight/2, tx = cx, ty = cy;
   window.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; }, { passive:true });
